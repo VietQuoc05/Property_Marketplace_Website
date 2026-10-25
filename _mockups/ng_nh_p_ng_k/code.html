@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    name="viewport">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet">
+  <style>
+    @layer base {
+
+      html,
+      body {
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        background-color: #fcf9f2;
+        font-family: 'Be Vietnam Pro', sans-serif;
+      }
+
+      body {
+        overscroll-behavior-y: none;
+      }
+
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+
+      main>:first-child {
+        margin-top: 0 !important;
+      }
+
+      main>:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script
+    id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "ink-secondary": "rgba(28, 28, 28, 0.65)", "secondary-container": "#e7e2d9", "tertiary-fixed-dim": "#cac6c4", "inverse-primary": "#c8c6c5", "secondary": "#615e57", "on-secondary-fixed-variant": "#494740", "surface-container-highest": "#e5e2db", "error": "#ba1a1a", "on-error-container": "#93000a", "border-strong": "rgba(28, 28, 28, 0.4)", "surface-container-high": "#ebe8e1", "on-surface": "#1c1c18", "secondary-fixed-dim": "#cbc6be", "ink-quaternary": "rgba(28, 28, 28, 0.20)", "ink-primary": "#1c1c1c", "on-secondary-fixed": "#1d1c16", "inverse-on-surface": "#f3f0e9", "outline": "#747878", "on-primary": "#ffffff", "surface": "#fcf9f2", "surface-bright": "#fcf9f2", "tertiary-fixed": "#e6e2df", "surface-card": "#ffffff", "surface-container-low": "#f6f3ec", "surface-variant": "#e5e2db", "error-container": "#ffdad6", "on-tertiary-container": "#878482", "tertiary": "#010101", "on-error": "#ffffff", "primary": "#010101", "secondary-fixed": "#e7e2d9", "primary-fixed": "#e5e2e1", "on-secondary": "#ffffff", "tertiary-container": "#1d1c1b", "border-subtle": "#eceae4", "accent-warm": "#d97706", "on-surface-variant": "#444748", "background": "#fcf9f2", "surface-container-lowest": "#ffffff", "on-secondary-container": "#67645d", "surface-dim": "#dcdad3", "primary-fixed-dim": "#c8c6c5", "on-primary-fixed-variant": "#474746", "surface-tint": "#5f5e5e", "on-tertiary-fixed": "#1c1b1a", "surface-parchment": "#f7f4ed", "on-primary-fixed": "#1b1b1b", "on-tertiary": "#ffffff", "inverse-surface": "#31312c", "on-background": "#1c1c18", "outline-variant": "#c4c7c7", "on-tertiary-fixed-variant": "#484645", "surface-container": "#f0eee7", "on-primary-container": "#858484", "ink-tertiary": "rgba(28, 28, 28, 0.40)", "primary-container": "#1c1c1c" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-lg": "1.5rem", "container-padding-desktop": "2.5rem", "space-2xs": "0.25rem", "space-md": "1rem", "space-2xl": "3rem", "gutter": "1.25rem", "space-3xl": "4.5rem", "space-xl": "2rem", "space-xs": "0.5rem", "container-padding-tablet": "1.5rem", "container-padding-mobile": "1rem", "space-sm": "0.75rem" }, fontFamily: { "headline-lg": ["Be Vietnam Pro"], "headline-xl": ["Be Vietnam Pro"], "body-sm": ["Be Vietnam Pro"], "label-md": ["Be Vietnam Pro"], "label-sm": ["Be Vietnam Pro"], "headline-lg-mobile": ["Be Vietnam Pro"], "headline-md": ["Be Vietnam Pro"], "body-lg": ["Be Vietnam Pro"], "headline-sm": ["Be Vietnam Pro"], "headline-xl-mobile": ["Be Vietnam Pro"], "body-md": ["Be Vietnam Pro"] }, fontSize: { "headline-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.025em", "fontWeight": "600" }], "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.03em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }], "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "600" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "headline-xl-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "400" }] } } } }</script>
+</head>
+
+<body class="bg-surface text-ink-primary font-body-md text-body-md flex flex-col min-h-screen pt-safe pb-safe">
+  <main class="flex flex-col relative w-full bg-surface min-h-screen">
+    <div class="flex flex-col w-full py-space-lg max-w-md mx-auto px-6">
+      <div class="flex flex-col items-center text-center mb-space-lg">
+        <div
+          class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center p-2 mb-space-sm shadow-sm">
+          <img alt="Haven Real Estate Logo" class="w-full h-full object-contain rounded-md"
+            src="https://lh3.googleusercontent.com/aida/AEtjO1U75tBJB4rzLGw5cQLMx9PfxFWaRyrgsWN9PKKKdtAu4HEWS-ZMWnd43w9NyZsc9pRP5zGPGYIVofisdPVW92u2gv1EUhSSg52rr_PbVxtKFTUskaZOJAe4F7zLtX_X47ND_QK6YJbSeJEKREO6uXDOjEaB0bEO483pA4F4BYMmPQgy7wX2rBBoyyIR0nDc4n0WlyizfhLhze2SF0m6LgTZ9pReyELxPFloY-5t7UaWmR0WXUgg0AxOoeR2">
+        </div>
+        <span class="font-label-sm text-label-sm uppercase tracking-widest text-ink-secondary mb-1">haven. living</span>
+        <h1
+          class="font-headline-xl-mobile text-headline-xl-mobile text-ink-primary font-semibold tracking-tight max-w-[280px]">
+          Tìm không gian sống lý tưởng của bạn
+        </h1>
+      </div>
+      <div class="p-1 bg-surface-container rounded-full flex relative mb-space-lg">
+        <button
+          class="flex-1 py-2 rounded-full font-label-md text-label-md font-medium text-on-primary bg-ink-primary transition-all duration-200 shadow-sm flex items-center justify-center gap-1.5"
+          id="tab-login" onclick="switchAuthTab('login')"
+          style="box-shadow: inset 0 0.5px 0 0 rgba(255, 255, 255, 0.2), inset 0 0 0 0.5px rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.05);">
+          <span class="material-symbols-outlined text-[16px]">login</span>
+          Đăng nhập
+        </button>
+        <button
+          class="flex-1 py-2 rounded-full font-label-md text-label-md font-medium text-ink-secondary bg-transparent hover:text-ink-primary transition-all duration-200 flex items-center justify-center gap-1.5"
+          id="tab-register" onclick="switchAuthTab('register')">
+          <span class="material-symbols-outlined text-[16px]">person_add</span>
+          Đăng ký
+        </button>
+      </div>
+      <form class="flex flex-col gap-space-sm" id="auth-form" onsubmit="event.preventDefault();">
+        <div class="hidden flex-col gap-space-sm" id="register-fields">
+          <div class="flex flex-col gap-1">
+            <label class="font-label-sm text-label-sm text-ink-secondary font-medium pl-1">Họ và tên</label>
+            <div class="relative flex items-center bg-surface-parchment rounded-lg shadow-sm">
+              <span class="material-symbols-outlined absolute left-3 text-ink-secondary text-[20px]">badge</span>
+              <input
+                class="w-full h-11 pl-10 pr-3.5 bg-transparent font-body-md text-body-md text-ink-primary placeholder:text-ink-quaternary focus:outline-none focus:bg-surface-card rounded-lg transition-colors"
+                placeholder="Nguyễn Văn An" type="text">
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="font-label-sm text-label-sm text-ink-secondary font-medium pl-1">Email hoặc Số điện
+            thoại</label>
+          <div class="relative flex items-center bg-surface-parchment rounded-lg shadow-sm">
+            <span
+              class="material-symbols-outlined absolute left-3 text-ink-secondary text-[20px]">alternate_email</span>
+            <input
+              class="w-full h-11 pl-10 pr-3.5 bg-transparent font-body-md text-body-md text-ink-primary placeholder:text-ink-quaternary focus:outline-none focus:bg-surface-card rounded-lg transition-colors"
+              placeholder="name@example.com hoặc 090..." type="text">
+          </div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center justify-between pl-1">
+            <label class="font-label-sm text-label-sm text-ink-secondary font-medium">Mật khẩu</label>
+            <button
+              class="font-label-sm text-label-sm text-ink-secondary underline hover:text-ink-primary transition-colors"
+              id="forgot-pw-btn" type="button">Quên mật khẩu?</button>
+          </div>
+          <div class="relative flex items-center bg-surface-parchment rounded-lg shadow-sm">
+            <span class="material-symbols-outlined absolute left-3 text-ink-secondary text-[20px]">lock</span>
+            <input
+              class="w-full h-11 pl-10 pr-10 bg-transparent font-body-md text-body-md text-ink-primary placeholder:text-ink-quaternary focus:outline-none focus:bg-surface-card rounded-lg transition-colors"
+              id="password-input" placeholder="••••••••" type="password">
+            <button
+              class="absolute right-2.5 p-1 text-ink-secondary hover:text-ink-primary transition-colors flex items-center justify-center"
+              onclick="togglePasswordVisibility()" type="button">
+              <span class="material-symbols-outlined text-[20px]" id="eye-icon">visibility</span>
+            </button>
+          </div>
+        </div>
+        <div class="hidden items-start gap-2 pt-1 pl-0.5" id="register-terms">
+          <input class="mt-0.5 accent-ink-primary rounded" id="terms-agree" type="checkbox">
+          <label class="font-body-sm text-body-sm text-ink-secondary" for="terms-agree">
+            Tôi đồng ý nhận thông báo cập nhật bảng giá và căn hộ mới nhất qua thư điện tử.
+          </label>
+        </div>
+        <button
+          class="w-full mt-2 h-11 rounded-lg bg-ink-primary text-surface font-label-md text-label-md font-semibold tracking-wide flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition-all"
+          id="submit-btn"
+          style="box-shadow: inset 0 0.5px 0 0 rgba(255, 255, 255, 0.2), inset 0 0 0 0.5px rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.05);"
+          type="submit">
+          <span id="submit-label" class="">Đăng nhập ngay</span>
+          <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+        </button>
+      </form>
+      <div class="flex items-center my-space-md">
+        <div class="flex-1 h-[1px] bg-secondary-container"></div>
+        <span class="px-3 font-body-sm text-body-sm text-ink-secondary">hoặc tiếp tục với</span>
+        <div class="flex-1 h-[1px] bg-secondary-container"></div>
+      </div>
+      <div class="grid grid-cols-2 gap-3 mb-space-lg">
+        <button
+          class="h-11 rounded-lg bg-surface-parchment hover:bg-surface-card text-ink-primary font-label-md text-label-md font-medium flex items-center justify-center gap-2.5 transition-colors shadow-sm active:scale-[0.99]"
+          type="button">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              fill="#4285F4"></path>
+            <path
+              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              fill="#34A853"></path>
+            <path
+              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+              fill="#FBBC05"></path>
+            <path
+              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+              fill="#EA4335"></path>
+          </svg>
+          Google
+        </button>
+        <button
+          class="h-11 rounded-lg bg-surface-parchment hover:bg-surface-card text-ink-primary font-label-md text-label-md font-medium flex items-center justify-center gap-2.5 transition-colors shadow-sm active:scale-[0.99]"
+          type="button">
+          <svg class="w-4 h-4 fill-current text-ink-primary" viewBox="0 0 170 170">
+            <path
+              d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.74 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.67-7.81-11.96-14.34-6.19-9.3-11.05-20.08-14.59-32.33-3.53-12.25-5.3-23.77-5.3-34.56 0-14.15 3.65-25.99 10.96-35.53 7.31-9.54 16.5-14.37 27.57-14.5 4.58 0 9.8 1.19 15.66 3.56 5.86 2.37 9.87 3.6 12.04 3.69 1.63 0 5.87-1.38 12.74-4.14 6.87-2.77 12.77-3.92 17.7-3.45 13.59.88 24.31 5.76 32.18 14.65-11.83 7.18-17.61 16.96-17.34 29.35.27 9.77 4.09 17.84 11.47 24.23 7.37 6.38 16.03 10.02 25.98 10.91-2.04 6.36-4.46 12.44-7.25 18.23zM119.22 31.84c0-7.72 2.76-14.92 8.28-21.6 5.53-6.68 12.39-10.24 20.6-10.24.22 1.02.33 1.94.33 2.78 0 7.61-2.88 14.9-8.63 21.87-5.75 6.97-12.63 10.74-20.64 11.31.06-1.4.06-2.77.06-4.12z">
+            </path>
+          </svg>
+          Apple
+        </button>
+      </div>
+      <div class="mt-auto pt-space-md text-center">
+        <p class="font-body-sm text-body-sm text-ink-secondary leading-relaxed">
+          Bằng việc tiếp tục, bạn đồng ý với
+          <a class="text-ink-primary font-medium underline" href="#">Điều khoản dịch vụ</a>
+          &amp;
+          <a class="text-ink-primary font-medium underline" href="#">Chính sách bảo mật</a>
+          của haven.
+        </p>
+      </div>
+    </div>
+    <script>
+      function switchAuthTab(type) {
+        var isLogin = type === 'login';
+        var loginBtn = document.getElementById('tab-login');
+        var regBtn = document.getElementById('tab-register');
+        var regFields = document.getElementById('register-fields');
+        var regTerms = document.getElementById('register-terms');
+        var forgotBtn = document.getElementById('forgot-pw-btn');
+        var submitLabel = document.getElementById('submit-label');
+
+        if (isLogin) {
+          loginBtn.className = 'flex-1 py-2 rounded-full font-label-md text-label-md font-medium text-on-primary bg-ink-primary transition-all duration-200 shadow-sm flex items-center justify-center gap-1.5';
+          loginBtn.style.boxShadow = 'inset 0 0.5px 0 0 rgba(255, 255, 255, 0.2), inset 0 0 0 0.5px rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.05)';
+          regBtn.className = 'flex-1 py-2 rounded-full font-label-md text-label-md font-medium text-ink-secondary bg-transparent hover:text-ink-primary transition-all duration-200 flex items-center justify-center gap-1.5';
+          regBtn.style.boxShadow = 'none';
+
+          regFields.classList.add('hidden');
+          regFields.classList.remove('flex');
+          regTerms.classList.add('hidden');
+          regTerms.classList.remove('flex');
+          forgotBtn.classList.remove('hidden');
+          submitLabel.innerText = 'Đăng nhập ngay';
+        } else {
+          regBtn.className = 'flex-1 py-2 rounded-full font-label-md text-label-md font-medium text-on-primary bg-ink-primary transition-all duration-200 shadow-sm flex items-center justify-center gap-1.5';
+          regBtn.style.boxShadow = 'inset 0 0.5px 0 0 rgba(255, 255, 255, 0.2), inset 0 0 0 0.5px rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.05)';
+          loginBtn.className = 'flex-1 py-2 rounded-full font-label-md text-label-md font-medium text-ink-secondary bg-transparent hover:text-ink-primary transition-all duration-200 flex items-center justify-center gap-1.5';
+          loginBtn.style.boxShadow = 'none';
+
+          regFields.classList.remove('hidden');
+          regFields.classList.add('flex');
+          regTerms.classList.remove('hidden');
+          regTerms.classList.add('flex');
+          forgotBtn.classList.add('hidden');
+          submitLabel.innerText = 'Tạo tài khoản mới';
+        }
+      }
+
+      function togglePasswordVisibility() {
+        var pwInput = document.getElementById('password-input');
+        var eyeIcon = document.getElementById('eye-icon');
+        if (pwInput.type === 'password') {
+          pwInput.type = 'text';
+          eyeIcon.innerText = 'visibility_off';
+        } else {
+          pwInput.type = 'password';
+          eyeIcon.innerText = 'visibility';
+        }
+      }
+    </script>
+  </main>
+
+</body>
+
+</html>
