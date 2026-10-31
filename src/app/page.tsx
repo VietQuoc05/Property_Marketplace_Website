@@ -1,12 +1,18 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ListingCard } from '@/components/ListingCard';
 import { ListingCardSkeleton } from '@/components/ui/Skeleton';
-import { FilterModal, FilterState } from '@/components/FilterModal';
+import { FilterModal } from '@/components/FilterModal';
 import { getSocket } from '@/lib/socket';
+import {
+  buildFilterUrl,
+  getFilterSummaryText,
+  parseFilterUrl,
+  FilterState,
+} from '@/lib/filter-url';
 
 interface RawListing {
   id: string;
@@ -48,8 +54,16 @@ export default function Home() {
   const [networkError, setNetworkError] = useState(false);
 
   const router = useRouter();
-
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const filterOptions = [
+    { label: 'Tất cả', type: null },
+    { label: 'Căn hộ/Chung cư', type: 'APARTMENT' },
+    { label: 'Nhà phố', type: 'HOUSE' },
+    { label: 'Đất', type: 'LAND' },
+    { label: 'Trọ', type: 'ROOM' },
+    { label: 'Mặt bằng/Văn phòng', type: 'OFFICE' },
+  ];
 
   useEffect(() => {
     const handleFocusSearch = () => {
@@ -75,15 +89,17 @@ export default function Home() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [loadingListings, setLoadingListings] = useState(true);
 
-  const fetchFeedListings = async (
+  // Computes the summary text below "Gợi ý cho bạn hôm nay"
+  const filterSummaryText = useMemo(() => {
+    return getFilterSummaryText(activeFilters);
+  }, [activeFilters]);
+
+  // Builds query string for backend API (/feed)
+  const buildFeedQueryParams = (
     filterType?: string | null,
     customFilters: FilterState = activeFilters,
     searchQuery = searchTerm,
   ) => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
-    setLoadingListings(true);
-
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
     const params = new URLSearchParams();
     params.set('page', '1');
     params.set('limit', '20');
@@ -135,8 +151,22 @@ export default function Home() {
     if (customFilters.br) params.set('minBr', customFilters.br);
     if (customFilters.wc) params.set('minWc', customFilters.wc);
 
+    return params.toString();
+  };
+
+  const fetchFeedListings = async (
+    filterType?: string | null,
+    customFilters: FilterState = activeFilters,
+    searchQuery = searchTerm,
+  ) => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+    setLoadingListings(true);
+
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    const queryString = buildFeedQueryParams(filterType, customFilters, searchQuery);
+
     try {
-      const feedRes = await fetch(`${apiUrl}/feed?${params.toString()}`, {
+      const feedRes = await fetch(`${apiUrl}/feed?${queryString}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (feedRes.ok) {
@@ -152,27 +182,39 @@ export default function Home() {
     }
   };
 
+  // Synchronizes browser URL path & query string like ITviec without full page refresh
+  const updateBrowserUrl = (filters: FilterState, search?: string) => {
+    if (typeof window === 'undefined') return;
+    const newUrl = buildFilterUrl(filters, search);
+    const currentUrl = window.location.pathname + window.location.search;
+    if (currentUrl !== newUrl) {
+      window.history.pushState({ filters, search }, '', newUrl);
+    }
+  };
+
   const handleApplyFilters = (newFilters: FilterState) => {
     setActiveFilters(newFilters);
     // If listingType was picked in modal, sync category pill label
     if (newFilters.listingType) {
       const match = filterOptions.find((o) => o.type === newFilters.listingType);
-      if (match) setSelectedFilter(match.label);
+      setSelectedFilter(match ? match.label : 'Tất cả');
+    } else {
+      setSelectedFilter('Tất cả');
     }
-    const currentPillType =
-      filterOptions.find((o) => o.label === selectedFilter)?.type ?? null;
-    fetchFeedListings(currentPillType, newFilters, searchTerm);
+    updateBrowserUrl(newFilters, searchTerm);
+    fetchFeedListings(newFilters.listingType, newFilters, searchTerm);
   };
 
   const handleResetFilters = () => {
     setActiveFilters({});
-    const currentPillType =
-      filterOptions.find((o) => o.label === selectedFilter)?.type ?? null;
-    fetchFeedListings(currentPillType, {}, searchTerm);
+    setSelectedFilter('Tất cả');
+    updateBrowserUrl({}, searchTerm);
+    fetchFeedListings(null, {}, searchTerm);
   };
 
   const hasActiveFilters = Object.values(activeFilters).some((v) => Boolean(v));
 
+  // Initial load and URL parsing
   useEffect(() => {
     let isCancelled = false;
 
@@ -187,6 +229,33 @@ export default function Home() {
         window.history.replaceState({}, document.title, window.location.pathname);
       }
 
+      // 2. Parse URL path and query parameters into FilterState
+      const parsed = await parseFilterUrl(
+        window.location.pathname,
+        new URLSearchParams(window.location.search),
+        apiUrl
+      );
+
+      const initialFilters = parsed.filters;
+      const initialSearch = parsed.searchTerm;
+
+      if (!isCancelled) {
+        if (Object.keys(initialFilters).length > 0 || initialSearch) {
+          setActiveFilters(initialFilters);
+          if (initialSearch) setSearchTerm(initialSearch);
+          if (initialFilters.listingType) {
+            const match = filterOptions.find((o) => o.type === initialFilters.listingType);
+            if (match) setSelectedFilter(match.label);
+          }
+        }
+      }
+
+      const feedQueryString = buildFeedQueryParams(
+        initialFilters.listingType || null,
+        initialFilters,
+        initialSearch
+      );
+
       const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
 
       if (!token) {
@@ -194,7 +263,7 @@ export default function Home() {
         setUser(null);
         setFavoriteIds(new Set());
         try {
-          const feedRes = await fetch(`${apiUrl}/feed?page=1&limit=20`);
+          const feedRes = await fetch(`${apiUrl}/feed?${feedQueryString}`);
           if (feedRes.ok) {
             const feedData = await feedRes.json();
             if (feedData.data && Array.isArray(feedData.data) && !isCancelled) {
@@ -224,7 +293,7 @@ export default function Home() {
           fetch(`${apiUrl}/listings/interested/me`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch(`${apiUrl}/feed?page=1&limit=20`, {
+          fetch(`${apiUrl}/feed?${feedQueryString}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -284,6 +353,33 @@ export default function Home() {
       isCancelled = true;
     };
   }, [router]);
+
+  // Support browser Back/Forward navigation with URL parsing
+  useEffect(() => {
+    const handlePopState = async () => {
+      if (typeof window === 'undefined') return;
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+      const parsed = await parseFilterUrl(
+        window.location.pathname,
+        new URLSearchParams(window.location.search),
+        apiUrl
+      );
+      setActiveFilters(parsed.filters);
+      setSearchTerm(parsed.searchTerm);
+      if (parsed.filters.listingType) {
+        const match = filterOptions.find((o) => o.type === parsed.filters.listingType);
+        setSelectedFilter(match ? match.label : 'Tất cả');
+      } else {
+        setSelectedFilter('Tất cả');
+      }
+      fetchFeedListings(parsed.filters.listingType, parsed.filters, parsed.searchTerm);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
 
   // Realtime Feed & Listing Socket.IO listeners
   useEffect(() => {
@@ -375,15 +471,6 @@ export default function Home() {
     }
   };
 
-  const filterOptions = [
-    { label: 'Tất cả', type: null },
-    { label: 'Căn hộ/Chung cư', type: 'APARTMENT' },
-    { label: 'Nhà phố', type: 'HOUSE' },
-    { label: 'Đất', type: 'LAND' },
-    { label: 'Trọ', type: 'ROOM' },
-    { label: 'Mặt bằng/Văn phòng', type: 'OFFICE' },
-  ];
-
   if (checkingAuth) {
     return (
       <div className="flex flex-col min-h-screen bg-surface">
@@ -403,7 +490,7 @@ export default function Home() {
 
               {/* Filter Pills */}
               <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-2">
-                {['Tất cả', 'Căn hộ/Chung cư', 'Nhà phố', 'Đất', 'Trọ', 'Mặt bằng/Văn phòng'].map((label, idx) => (
+                {filterOptions.map((opt, idx) => (
                   <div
                     key={idx}
                     className="h-8 w-20 bg-surface-card rounded-full border border-border-subtle animate-pulse flex-shrink-0"
@@ -471,6 +558,7 @@ export default function Home() {
                     if (e.key === 'Enter') {
                       const currentType =
                         filterOptions.find((f) => f.label === selectedFilter)?.type ?? null;
+                      updateBrowserUrl(activeFilters, searchTerm);
                       fetchFeedListings(currentType, activeFilters, searchTerm);
                     }
                   }}
@@ -483,9 +571,11 @@ export default function Home() {
                       setSearchTerm('');
                       const currentType =
                         filterOptions.find((f) => f.label === selectedFilter)?.type ?? null;
+                      updateBrowserUrl(activeFilters, '');
                       fetchFeedListings(currentType, activeFilters, '');
                     }}
                     className="text-ink-quaternary hover:text-ink-secondary p-1 flex items-center flex-shrink-0"
+                    title="Xóa tìm kiếm"
                   >
                     <span className="material-symbols-outlined text-[16px]">close</span>
                   </button>
@@ -511,13 +601,17 @@ export default function Home() {
                   key={opt.label}
                   onClick={() => {
                     setSelectedFilter(opt.label);
-                    if (activeFilters.listingType && activeFilters.listingType !== opt.type) {
-                      const updated = { ...activeFilters, listingType: opt.type || undefined };
-                      setActiveFilters(updated);
-                      fetchFeedListings(opt.type, updated, searchTerm);
+                    let updated: FilterState = { ...activeFilters };
+                    if (opt.type) {
+                      updated = { ...updated, listingType: opt.type };
                     } else {
-                      fetchFeedListings(opt.type, activeFilters, searchTerm);
+                      // Clicked "Tất cả": clear listingType
+                      const { listingType: _, ...rest } = updated;
+                      updated = rest;
                     }
+                    setActiveFilters(updated);
+                    updateBrowserUrl(updated, searchTerm);
+                    fetchFeedListings(opt.type, updated, searchTerm);
                   }}
                   className={`whitespace-nowrap flex-shrink-0 px-3.5 py-1.5 rounded-full font-label-md text-label-md transition-colors ${
                     selectedFilter === opt.label
@@ -551,17 +645,32 @@ export default function Home() {
 
         {/* Content Section */}
         <div className="flex flex-col gap-4 pt-4">
-          <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+          <div className="flex flex-col gap-1.5">
             <h1 className="font-headline-md text-headline-md text-ink-primary font-semibold">
               Gợi ý cho bạn hôm nay
             </h1>
 
-
+            {/* Filter detail summary line displayed right below title */}
+            {filterSummaryText && (
+              <div className="flex items-center gap-2 flex-wrap">
+                <p className="font-body-md text-body-md text-ink-secondary font-medium">
+                  {filterSummaryText}
+                </p>
+                {hasActiveFilters && (
+                  <button
+                    onClick={handleResetFilters}
+                    className="text-accent-warm hover:underline text-xs font-medium ml-1 inline-flex items-center gap-0.5"
+                    title="Xóa bộ lọc"
+                  >
+                    <span>(Bỏ lọc)</span>
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
-
           {/* Listing Cards Grid (5xN) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5 sm:gap-4 lg:gap-4.5 mt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5 sm:gap-4 lg:gap-4.5 mt-2">
             {loadingListings ? (
               Array.from({ length: 10 }).map((_, i) => (
                 <ListingCardSkeleton key={`feed-skeleton-${i}`} />

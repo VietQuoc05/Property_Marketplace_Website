@@ -2,20 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { formatNumberWithDots, parseNumberFromDots } from '@/components/ui/CurrencyInput';
+import { FilterState } from '@/lib/filter-url';
 
-export interface FilterState {
-  cityId?: string;
-  districtId?: string;
-  wardId?: string;
-  saleType?: 'RENT' | 'SALE' | '';
-  listingType?: string;
-  minPrice?: string;
-  maxPrice?: string;
-  minSize?: string;
-  maxSize?: string;
-  br?: string;
-  wc?: string;
-}
+export type { FilterState };
 
 interface FilterModalProps {
   isOpen: boolean;
@@ -285,10 +274,17 @@ export const FilterModal: React.FC<FilterModalProps> = ({
   if (!isOpen) return null;
 
   const handleApply = () => {
+    const selectedCity = cities.find((c) => c.id === cityId);
+    const selectedDistrict = districts.find((d) => d.id === districtId);
+    const selectedWard = wards.find((w) => w.id === wardId);
+
     onApply({
       cityId: cityId || undefined,
+      cityName: selectedCity?.name,
       districtId: districtId || undefined,
+      districtName: selectedDistrict?.name,
       wardId: wardId || undefined,
+      wardName: selectedWard?.name,
       saleType: saleType || undefined,
       listingType: listingType || undefined,
       minPrice: parseNumberFromDots(minPrice) || undefined,
