@@ -624,23 +624,6 @@ export default function Home() {
               ))}
             </div>
           </div>
-
-          {/* Active Filter Indicators */}
-          {hasActiveFilters && (
-            <div className="flex items-center justify-between pt-2 px-1">
-              <div className="flex items-center gap-1.5 text-ink-primary font-label-sm text-label-sm">
-                <span className="material-symbols-outlined text-[16px] text-accent-warm">filter_alt</span>
-                <span className="font-medium">Đang áp dụng bộ lọc nâng cao</span>
-              </div>
-              <button
-                onClick={handleResetFilters}
-                className="text-accent-warm hover:underline font-label-sm text-label-sm font-medium flex items-center gap-1"
-              >
-                <span>Bỏ lọc</span>
-                <span className="material-symbols-outlined text-[14px]">close</span>
-              </button>
-            </div>
-          )}
         </section>
 
         {/* Content Section */}
@@ -650,22 +633,28 @@ export default function Home() {
               Gợi ý cho bạn hôm nay
             </h1>
 
-            {/* Filter detail summary line displayed right below title */}
-            {filterSummaryText && (
-              <div className="flex items-center gap-2 flex-wrap">
-                <p className="font-body-md text-body-md text-ink-secondary font-medium">
-                  {filterSummaryText}
-                </p>
-                {hasActiveFilters && (
-                  <button
-                    onClick={handleResetFilters}
-                    className="text-accent-warm hover:underline text-xs font-medium ml-1 inline-flex items-center gap-0.5"
-                    title="Xóa bộ lọc"
-                  >
-                    <span>(Bỏ lọc)</span>
-                  </button>
-                )}
+            {/* Active Filter Indicators right below "Gợi ý cho bạn hôm nay" */}
+            {hasActiveFilters && (
+              <div className="flex items-center justify-between py-0.5">
+                <div className="flex items-center gap-1.5 text-ink-primary font-label-sm text-label-sm">
+                  <span className="material-symbols-outlined text-[16px] text-accent-warm">filter_alt</span>
+                  <span className="font-medium">Đang áp dụng bộ lọc nâng cao</span>
+                </div>
+                <button
+                  onClick={handleResetFilters}
+                  className="text-accent-warm hover:underline font-label-sm text-label-sm font-medium flex items-center gap-1"
+                >
+                  <span>Bỏ lọc</span>
+                  <span className="material-symbols-outlined text-[14px]">close</span>
+                </button>
               </div>
+            )}
+
+            {/* Filter detail summary line */}
+            {filterSummaryText && (
+              <p className="font-body-md text-body-md text-ink-secondary font-medium">
+                {filterSummaryText}
+              </p>
             )}
           </div>
 
