@@ -713,7 +713,11 @@ export default function Home() {
                     isFavorite={favoriteIds.has(item.id)}
                     compact={true}
                     onFavoriteToggle={(id) => handleFavoriteToggle(id, favoriteIds.has(item.id))}
-                    onClick={(id) => router.push(`/listings/${id}`)}
+                    onClick={(id) => {
+                      if (typeof window !== 'undefined') {
+                        window.open(`/listings/${id}`, '_blank', 'noopener,noreferrer');
+                      }
+                    }}
                     onHostClick={(hId) => {
                       router.push(`/profile/${hId}`);
                     }}
