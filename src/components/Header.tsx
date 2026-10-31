@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { NotificationModal } from './NotificationModal';
 
 import { getSocket } from '@/lib/socket';
+import { getSavedFeedUrl } from '@/lib/filter-url';
 
 interface HeaderProps {
   user?: {
@@ -68,31 +69,34 @@ export const Header: React.FC<HeaderProps> = ({ user }) => {
     <>
       <header className="fixed top-0 w-full z-50 pt-safe bg-surface-parchment/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(28,28,28,0.03)] border-b border-border-subtle">
         <div className="h-16 flex items-center justify-between px-4 max-w-7xl mx-auto">
-          <a 
-            href="/" 
+          <a
+            href="/"
             onClick={(e) => {
               e.preventDefault();
               if (typeof window !== 'undefined') {
-                if (window.location.pathname === '/' && window.location.search === '') {
-                  window.location.reload();
-                } else {
-                  window.location.href = '/';
+                  const targetUrl = getSavedFeedUrl();
+                  const currentUrl = window.location.pathname + window.location.search;
+                  if (currentUrl === targetUrl) {
+                    window.location.reload();
+                  } else {
+                    window.location.href = targetUrl;
+                  }
                 }
               }
-            }}
+            }
             className="flex items-center gap-2.5 group cursor-pointer"
           >
-            <img 
-              src="/logo.svg" 
-              alt="Homers Logo" 
+            <img
+              src="/logo.svg"
+              alt="Homers Logo"
               className="h-10 w-auto object-contain transition-transform group-hover:scale-105"
             />
           </a>
 
           <div className="flex items-center gap-2">
-            <button 
+            <button
               onClick={() => setIsNotifOpen(true)}
-              aria-label="Thông báo" 
+              aria-label="Thông báo"
               className="w-10 h-10 rounded-full flex items-center justify-center text-ink-primary hover:bg-surface-container transition-colors relative"
             >
               <span className="material-symbols-outlined text-[22px]">notifications</span>
@@ -102,12 +106,12 @@ export const Header: React.FC<HeaderProps> = ({ user }) => {
                 </span>
               )}
             </button>
-            
+
             <Link href={user ? "/profile" : "/login"}>
               {user?.avatar ? (
-                <img 
-                  src={user.avatar} 
-                  alt={user.name || "User"} 
+                <img
+                  src={user.avatar}
+                  alt={user.name || "User"}
                   className="w-9 h-9 rounded-full object-cover border border-border-strong shadow-sm"
                 />
               ) : (

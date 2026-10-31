@@ -339,3 +339,117 @@ async function parseLocationSlug(slug: string, filters: FilterState, apiUrl: str
       .join(' ');
   }
 }
+
+export const SESSION_FILTER_KEY = 'homers:feed_filters';
+export const SESSION_SEARCH_KEY = 'homers:feed_search';
+export const SESSION_URL_KEY = 'homers:feed_url';
+
+export interface SavedSessionFilter {
+  filters: FilterState;
+  searchTerm: string;
+  url: string;
+}
+
+/**
+ * Checks whether a given FilterState has any active filter criteria.
+ */
+export function hasActiveFilterCriteria(filters?: FilterState | null): boolean {
+  if (!filters) return false;
+  return Boolean(
+    filters.cityId ||
+    filters.cityName ||
+    filters.districtId ||
+    filters.districtName ||
+    filters.wardId ||
+    filters.wardName ||
+    filters.saleType ||
+    filters.listingType ||
+    filters.minPrice ||
+    filters.maxPrice ||
+    filters.minSize ||
+    filters.maxSize ||
+    filters.br ||
+    filters.wc
+  );
+}
+
+/**
+ * Saves current feed filter state, search term, and URL to sessionStorage.
+ * Persists during the browser tab/window session and clears when the tab/window is closed.
+ */
+export function saveFilterToSession(filters: FilterState, searchTerm?: string, url?: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const hasFilters = hasActiveFilterCriteria(filters);
+    const hasSearch = Boolean(searchTerm?.trim());
+
+    if (!hasFilters && !hasSearch) {
+      clearFilterFromSession();
+      return;
+    }
+
+    sessionStorage.setItem(SESSION_FILTER_KEY, JSON.stringify(filters));
+    sessionStorage.setItem(SESSION_SEARCH_KEY, searchTerm?.trim() || '');
+    sessionStorage.setItem(SESSION_URL_KEY, url || buildFilterUrl(filters, searchTerm));
+  } catch (err) {
+    console.warn('Failed to save filter to sessionStorage:', err);
+  }
+}
+
+/**
+ * Retrieves the saved filter state from sessionStorage if present.
+ */
+export function getSavedFilterFromSession(): SavedSessionFilter | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const rawFilters = sessionStorage.getItem(SESSION_FILTER_KEY);
+    const searchTerm = sessionStorage.getItem(SESSION_SEARCH_KEY) || '';
+    const url = sessionStorage.getItem(SESSION_URL_KEY) || '/';
+
+    if (!rawFilters && !searchTerm) {
+      return null;
+    }
+
+    const filters: FilterState = rawFilters ? JSON.parse(rawFilters) : {};
+    if (!hasActiveFilterCriteria(filters) && !searchTerm) {
+      return null;
+    }
+
+    return {
+      filters,
+      searchTerm,
+      url,
+    };
+  } catch (err) {
+    console.warn('Failed to parse saved filter from sessionStorage:', err);
+    return null;
+  }
+}
+
+/**
+ * Clears saved filter and search state from sessionStorage.
+ * Used when the user clicks "(Bỏ lọc)" or resets filters.
+ */
+export function clearFilterFromSession(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    sessionStorage.removeItem(SESSION_FILTER_KEY);
+    sessionStorage.removeItem(SESSION_SEARCH_KEY);
+    sessionStorage.removeItem(SESSION_URL_KEY);
+  } catch (err) {
+    console.warn('Failed to clear filter from sessionStorage:', err);
+  }
+}
+
+/**
+ * Gets the current saved feed URL from sessionStorage, or fallback to root '/'.
+ */
+export function getSavedFeedUrl(): string {
+  if (typeof window === 'undefined') return '/';
+  try {
+    return sessionStorage.getItem(SESSION_URL_KEY) || '/';
+  } catch {
+    return '/';
+  }
+}
+

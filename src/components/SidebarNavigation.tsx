@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { NotificationModal } from './NotificationModal';
+import { getSavedFeedUrl } from '@/lib/filter-url';
 
 import { getSocket } from '@/lib/socket';
 
@@ -212,60 +213,82 @@ export const SidebarNavigation: React.FC = () => {
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (typeof window !== 'undefined') {
-      if (window.location.pathname === '/' && window.location.search === '') {
-        window.location.reload();
-      } else {
-        window.location.href = '/';
+        const targetUrl = getSavedFeedUrl();
+        const currentUrl = window.location.pathname + window.location.search;
+        if (currentUrl === targetUrl) {
+          window.location.reload();
+        } else {
+          router.push(targetUrl);
+        }
       }
-    }
-  };
+    };
 
-  const fullAvatarUrl = user?.avatarUrl
-    ? user.avatarUrl.startsWith('http')
-      ? user.avatarUrl
-      : `${apiUrl}${user.avatarUrl}`
-    : null;
+    const fullAvatarUrl = user?.avatarUrl
+      ? user.avatarUrl.startsWith('http')
+        ? user.avatarUrl
+        : `${apiUrl}${user.avatarUrl}`
+      : null;
 
-  return (
-    <>
-      <aside className="fixed top-0 bottom-0 left-0 z-40 h-screen w-16 md:w-60 lg:w-64 bg-surface-card border-r border-border-subtle flex flex-col justify-between py-6 px-2.5 md:px-3 select-none transition-all duration-200">
-        {/* Top: Logo & Main Navigation List */}
-        <div className="flex flex-col gap-6">
-          {/* Logo Area */}
-          <div className="px-2 pt-1 pb-1">
-            <a href="/" onClick={handleLogoClick} className="flex items-center gap-2 group cursor-pointer">
-              {/* Full wordmark logo on desktop */}
-              <img
-                src="/logo.svg"
-                alt="Homers"
-                className="hidden md:block h-8 w-auto object-contain transition-transform group-hover:scale-105"
-              />
-              {/* Compact icon logo on mobile */}
-              <img
-                src="/favicon.svg"
-                alt="Homers"
-                className="block md:hidden w-8 h-8 rounded-xl object-contain mx-auto transition-transform group-hover:scale-110"
-              />
-            </a>
-          </div>
+    return (
+      <>
+        <aside className="fixed top-0 bottom-0 left-0 z-40 h-screen w-16 md:w-60 lg:w-64 bg-surface-card border-r border-border-subtle flex flex-col justify-between py-6 px-2.5 md:px-3 select-none transition-all duration-200">
+          {/* Top: Logo & Main Navigation List */}
+          <div className="flex flex-col gap-6">
+            {/* Logo Area */}
+            <div className="px-2 pt-1 pb-1">
+              <a href="/" onClick={handleLogoClick} className="flex items-center gap-2 group cursor-pointer">
+                {/* Full wordmark logo on desktop */}
+                <img
+                  src="/logo.svg"
+                  alt="Homers"
+                  className="hidden md:block h-8 w-auto object-contain transition-transform group-hover:scale-105"
+                />
+                {/* Compact icon logo on mobile */}
+                <img
+                  src="/favicon.svg"
+                  alt="Homers"
+                  className="block md:hidden w-8 h-8 rounded-xl object-contain mx-auto transition-transform group-hover:scale-110"
+                />
+              </a>
+            </div>
 
-          {/* Navigation Items (Instagram-styled in exact order) */}
-          <nav className="flex flex-col gap-1.5">
-            {/* 1. Home */}
-            {(() => {
-              const isActive = pathname === '/';
-              return (
-                <Link
-                  href="/"
-                  title="Trang chủ"
-                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${
-                    isActive
+            {/* Navigation Items (Instagram-styled in exact order) */}
+            <nav className="flex flex-col gap-1.5">
+              {/* 1. Home */}
+              {(() => {
+                const isHomeActive = pathname === '/' || (
+                  !pathname.startsWith('/forum') &&
+                  !pathname.startsWith('/my-listings') &&
+                  !pathname.startsWith('/messages') &&
+                  !pathname.startsWith('/create-listing') &&
+                  !pathname.startsWith('/profile') &&
+                  !pathname.startsWith('/listings') &&
+                  !pathname.startsWith('/favorites') &&
+                  !pathname.startsWith('/login') &&
+                  !pathname.startsWith('/register') &&
+                  !pathname.startsWith('/auth')
+                );
+                return (
+                  <Link
+                    href="/"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const targetUrl = getSavedFeedUrl();
+                      const currentUrl = window.location.pathname + window.location.search;
+                      if (currentUrl === targetUrl) {
+                        window.location.reload();
+                      } else {
+                        router.push(targetUrl);
+                      }
+                    }}
+                    title="Trang chủ"
+                    isHomeActive
                       ? 'font-bold text-ink-primary bg-surface-container/60'
-                      : 'font-medium text-ink-primary hover:bg-surface-container/50'
+                    : 'font-medium text-ink-primary hover:bg-surface-container/50'
                   }`}
                 >
                   <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
-                    {isActive ? (
+                    {isHomeActive ? (
                       <svg
                         className="w-[26px] h-[26px] transition-transform group-hover:scale-105"
                         viewBox="0 0 24 24"
@@ -287,11 +310,11 @@ export const SidebarNavigation: React.FC = () => {
                       </svg>
                     )}
                   </div>
-                  <span className={`hidden md:inline-block text-[15px] leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>
-                    Trang chủ
-                  </span>
-                </Link>
-              );
+              <span className={`hidden md:inline-block text-[15px] leading-none ${isHomeActive ? 'font-bold' : 'font-medium'}`}>
+                Trang chủ
+              </span>
+            </Link>
+            );
             })()}
 
             {/* Diễn đàn */}
@@ -301,11 +324,10 @@ export const SidebarNavigation: React.FC = () => {
                 <Link
                   href="/forum"
                   title="Diễn đàn"
-                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${
-                    isActive
+                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${isActive
                       ? 'font-bold text-ink-primary bg-surface-container/60'
                       : 'font-medium text-ink-primary hover:bg-surface-container/50'
-                  }`}
+                    }`}
                 >
                   <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
                     <svg
@@ -334,11 +356,10 @@ export const SidebarNavigation: React.FC = () => {
                 <Link
                   href={user ? '/my-listings' : '/login'}
                   title="Tin của tôi"
-                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${
-                    isActive
+                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${isActive
                       ? 'font-bold text-ink-primary bg-surface-container/60'
                       : 'font-medium text-ink-primary hover:bg-surface-container/50'
-                  }`}
+                    }`}
                 >
                   <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
                     <svg
@@ -372,11 +393,10 @@ export const SidebarNavigation: React.FC = () => {
                 <Link
                   href={user ? '/messages' : '/login'}
                   title="Tin nhắn"
-                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${
-                    isActive
+                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${isActive
                       ? 'font-bold text-ink-primary bg-surface-container/60'
                       : 'font-medium text-ink-primary hover:bg-surface-container/50'
-                  }`}
+                    }`}
                 >
                   <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center relative">
                     <svg
@@ -415,11 +435,10 @@ export const SidebarNavigation: React.FC = () => {
                 <Link
                   href={user ? '/favorites' : '/login'}
                   title="Tin đã lưu"
-                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${
-                    isActive
+                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${isActive
                       ? 'font-bold text-ink-primary bg-surface-container/60'
                       : 'font-medium text-ink-primary hover:bg-surface-container/50'
-                  }`}
+                    }`}
                 >
                   <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
                     <svg
@@ -452,11 +471,10 @@ export const SidebarNavigation: React.FC = () => {
                 setIsNotifOpen((prev) => !prev);
               }}
               title="Thông báo"
-              className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group text-left w-full relative ${
-                isNotifOpen
+              className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group text-left w-full relative ${isNotifOpen
                   ? 'font-bold text-ink-primary bg-surface-container/60'
                   : 'font-medium text-ink-primary hover:bg-surface-container/50'
-              }`}
+                }`}
             >
               <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center relative">
                 <svg
@@ -489,11 +507,10 @@ export const SidebarNavigation: React.FC = () => {
                 <Link
                   href={user ? '/create-listing' : '/login'}
                   title="Tạo tin"
-                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${
-                    isActive
+                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${isActive
                       ? 'font-bold text-ink-primary bg-surface-container/60'
                       : 'font-medium text-ink-primary hover:bg-surface-container/50'
-                  }`}
+                    }`}
                 >
                   <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
                     <svg
@@ -524,30 +541,27 @@ export const SidebarNavigation: React.FC = () => {
                 <Link
                   href={user ? '/profile' : '/login'}
                   title="Trang cá nhân"
-                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${
-                    isActive
+                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${isActive
                       ? 'font-bold text-ink-primary bg-surface-container/60'
                       : 'font-medium text-ink-primary hover:bg-surface-container/50'
-                  }`}
+                    }`}
                 >
                   <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
                     {fullAvatarUrl ? (
                       <img
                         src={fullAvatarUrl}
                         alt={user?.fullName || 'User'}
-                        className={`w-[26px] h-[26px] rounded-full object-cover transition-all ${
-                          isActive
+                        className={`w-[26px] h-[26px] rounded-full object-cover transition-all ${isActive
                             ? 'ring-2 ring-ink-primary ring-offset-2 scale-105'
                             : 'ring-1 ring-border-subtle group-hover:scale-105'
-                        }`}
+                          }`}
                       />
                     ) : (
                       <div
-                        className={`w-[26px] h-[26px] rounded-full bg-primary text-on-primary flex items-center justify-center text-xs font-semibold ${
-                          isActive
+                        className={`w-[26px] h-[26px] rounded-full bg-primary text-on-primary flex items-center justify-center text-xs font-semibold ${isActive
                             ? 'ring-2 ring-ink-primary ring-offset-2 scale-105'
                             : 'group-hover:scale-105'
-                        }`}
+                          }`}
                       >
                         <span className="material-symbols-outlined text-[16px]">person</span>
                       </div>
@@ -595,9 +609,8 @@ export const SidebarNavigation: React.FC = () => {
             type="button"
             onClick={() => setIsMoreOpen(!isMoreOpen)}
             title="Xem thêm"
-            className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group text-ink-primary hover:bg-surface-container/50 w-full ${
-              isMoreOpen ? 'bg-surface-container/60 font-bold' : 'font-medium'
-            }`}
+            className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group text-ink-primary hover:bg-surface-container/50 w-full ${isMoreOpen ? 'bg-surface-container/60 font-bold' : 'font-medium'
+              }`}
           >
             <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
               <svg
@@ -619,17 +632,17 @@ export const SidebarNavigation: React.FC = () => {
             </span>
           </button>
         </div>
-      </aside>
+      </aside >
 
-      {/* Notification Modal */}
-      <NotificationModal
-        isOpen={isNotifOpen}
-        onClose={() => {
-          setIsNotifOpen(false);
-          checkUnreadNotifications();
-        }}
-        onNotificationRead={checkUnreadNotifications}
-      />
+        {/* Notification Modal */ }
+        < NotificationModal
+    isOpen = { isNotifOpen }
+    onClose = {() => {
+  setIsNotifOpen(false);
+  checkUnreadNotifications();
+}}
+onNotificationRead = { checkUnreadNotifications }
+  />
     </>
   );
 };

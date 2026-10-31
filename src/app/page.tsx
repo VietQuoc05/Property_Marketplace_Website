@@ -12,6 +12,10 @@ import {
   getFilterSummaryText,
   parseFilterUrl,
   FilterState,
+  saveFilterToSession,
+  getSavedFilterFromSession,
+  clearFilterFromSession,
+  hasActiveFilterCriteria,
 } from '@/lib/filter-url';
 
 interface RawListing {
@@ -183,13 +187,14 @@ export default function Home() {
   };
 
   // Synchronizes browser URL path & query string like ITviec without full page refresh
-  const updateBrowserUrl = (filters: FilterState, search?: string) => {
-    if (typeof window === 'undefined') return;
+  const updateBrowserUrl = (filters: FilterState, search?: string): string => {
+    if (typeof window === 'undefined') return '/';
     const newUrl = buildFilterUrl(filters, search);
     const currentUrl = window.location.pathname + window.location.search;
     if (currentUrl !== newUrl) {
       window.history.pushState({ filters, search }, '', newUrl);
     }
+    return newUrl;
   };
 
   const handleApplyFilters = (newFilters: FilterState) => {
@@ -201,15 +206,18 @@ export default function Home() {
     } else {
       setSelectedFilter('Tất cả');
     }
-    updateBrowserUrl(newFilters, searchTerm);
+    const newUrl = updateBrowserUrl(newFilters, searchTerm);
+    saveFilterToSession(newFilters, searchTerm, newUrl);
     fetchFeedListings(newFilters.listingType, newFilters, searchTerm);
   };
 
   const handleResetFilters = () => {
     setActiveFilters({});
     setSelectedFilter('Tất cả');
-    updateBrowserUrl({}, searchTerm);
-    fetchFeedListings(null, {}, searchTerm);
+    setSearchTerm('');
+    clearFilterFromSession();
+    updateBrowserUrl({}, '');
+    fetchFeedListings(null, {}, '');
   };
 
   const hasActiveFilters = Object.values(activeFilters).some((v) => Boolean(v));
@@ -229,18 +237,41 @@ export default function Home() {
         window.history.replaceState({}, document.title, window.location.pathname);
       }
 
-      // 2. Parse URL path and query parameters into FilterState
-      const parsed = await parseFilterUrl(
-        window.location.pathname,
-        new URLSearchParams(window.location.search),
-        apiUrl
+      // 2. Determine initial filters: check current URL first, else fallback to sessionStorage
+      const currentPath = window.location.pathname;
+      const currentParams = new URLSearchParams(window.location.search);
+      const isRootPath = currentPath === '/' || currentPath === '';
+      const hasQueryParams = Array.from(currentParams.keys()).some(
+        (key) => key !== 'token' && key !== 'accessToken' && key !== 'focusSearch'
       );
 
-      const initialFilters = parsed.filters;
-      const initialSearch = parsed.searchTerm;
+      let initialFilters: FilterState = {};
+      let initialSearch = '';
+
+      if (!isRootPath || hasQueryParams) {
+        // Current URL has filter path segments or query parameters
+        const parsed = await parseFilterUrl(currentPath, currentParams, apiUrl);
+        initialFilters = parsed.filters;
+        initialSearch = parsed.searchTerm;
+        saveFilterToSession(
+          initialFilters,
+          initialSearch,
+          currentPath + (window.location.search || '')
+        );
+      } else {
+        // Clean root URL: check if we have a saved filter from sessionStorage
+        const saved = getSavedFilterFromSession();
+        if (saved && (hasActiveFilterCriteria(saved.filters) || saved.searchTerm)) {
+          initialFilters = saved.filters;
+          initialSearch = saved.searchTerm;
+          if (saved.url && saved.url !== '/') {
+            window.history.replaceState({ filters: saved.filters, search: saved.searchTerm }, '', saved.url);
+          }
+        }
+      }
 
       if (!isCancelled) {
-        if (Object.keys(initialFilters).length > 0 || initialSearch) {
+        if (hasActiveFilterCriteria(initialFilters) || initialSearch) {
           setActiveFilters(initialFilters);
           if (initialSearch) setSearchTerm(initialSearch);
           if (initialFilters.listingType) {
@@ -372,6 +403,11 @@ export default function Home() {
       } else {
         setSelectedFilter('Tất cả');
       }
+      saveFilterToSession(
+        parsed.filters,
+        parsed.searchTerm,
+        window.location.pathname + window.location.search
+      );
       fetchFeedListings(parsed.filters.listingType, parsed.filters, parsed.searchTerm);
     };
 
@@ -558,7 +594,8 @@ export default function Home() {
                     if (e.key === 'Enter') {
                       const currentType =
                         filterOptions.find((f) => f.label === selectedFilter)?.type ?? null;
-                      updateBrowserUrl(activeFilters, searchTerm);
+                      const newUrl = updateBrowserUrl(activeFilters, searchTerm);
+                      saveFilterToSession(activeFilters, searchTerm, newUrl);
                       fetchFeedListings(currentType, activeFilters, searchTerm);
                     }
                   }}
@@ -571,7 +608,8 @@ export default function Home() {
                       setSearchTerm('');
                       const currentType =
                         filterOptions.find((f) => f.label === selectedFilter)?.type ?? null;
-                      updateBrowserUrl(activeFilters, '');
+                      const newUrl = updateBrowserUrl(activeFilters, '');
+                      saveFilterToSession(activeFilters, '', newUrl);
                       fetchFeedListings(currentType, activeFilters, '');
                     }}
                     className="text-ink-quaternary hover:text-ink-secondary p-1 flex items-center flex-shrink-0"
@@ -610,7 +648,8 @@ export default function Home() {
                       updated = rest;
                     }
                     setActiveFilters(updated);
-                    updateBrowserUrl(updated, searchTerm);
+                    const newUrl = updateBrowserUrl(updated, searchTerm);
+                    saveFilterToSession(updated, searchTerm, newUrl);
                     fetchFeedListings(opt.type, updated, searchTerm);
                   }}
                   className={`whitespace-nowrap flex-shrink-0 px-3.5 py-1.5 rounded-full font-label-md text-label-md transition-colors ${
