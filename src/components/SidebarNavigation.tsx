@@ -282,11 +282,12 @@ export const SidebarNavigation: React.FC = () => {
                       }
                     }}
                     title="Trang chủ"
-                    isHomeActive
-                      ? 'font-bold text-ink-primary bg-surface-container/60'
-                    : 'font-medium text-ink-primary hover:bg-surface-container/50'
-                  }`}
-                >
+                    className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${
+                      isHomeActive
+                        ? 'font-bold text-ink-primary bg-surface-container/60'
+                        : 'font-medium text-ink-primary hover:bg-surface-container/50'
+                    }`}
+                  >
                   <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
                     {isHomeActive ? (
                       <svg
