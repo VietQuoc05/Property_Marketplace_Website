@@ -195,36 +195,8 @@ export default function ListingDetailPage() {
     }
   };
 
-  if (loading) {
-    return <ListingDetailSkeleton />;
-  }
-
-  if (error || !listing) {
-    return (
-      <div className="flex flex-col min-h-screen bg-surface">
-        <main className="flex-1 max-w-xl w-full mx-auto px-4 pt-12 pb-12 flex flex-col items-center justify-center text-center">
-          <span className="material-symbols-outlined text-[48px] text-ink-tertiary mb-2">error_outline</span>
-          <h2 className="font-headline-sm text-headline-sm text-ink-primary font-semibold mb-1">
-            {error || 'Bài đăng không tồn tại'}
-          </h2>
-          <button
-            onClick={() => router.push('/')}
-            className="mt-4 px-4 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-sm"
-          >
-            Quay lại trang chủ
-          </button>
-        </main>
-      </div>
-    );
-  }
-
-  // Price formatting
-  const isRent = listing.saleType === 'RENT';
-  const priceNum = isRent ? Number(listing.monthlyRent || 0) : Number(listing.salePrice || 0);
-  const formattedPriceStr = formatVietnamesePrice(priceNum);
-
-  // Images mapping
-  const imageList = listing.images?.map((img) => {
+  // Images mapping (computed unconditionally for hooks)
+  const imageList = listing?.images?.map((img) => {
     if (typeof img === 'string') return img.startsWith('http') ? img : `${apiUrl}${img}`;
     const rawUrl = img.imageUrl || img.url || '';
     return rawUrl.startsWith('http') ? rawUrl : `${apiUrl}${rawUrl}`;
@@ -299,6 +271,34 @@ export default function ListingDetailPage() {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [totalImages, showDeleteModal]);
+
+  if (loading) {
+    return <ListingDetailSkeleton />;
+  }
+
+  if (error || !listing) {
+    return (
+      <div className="flex flex-col min-h-screen bg-surface">
+        <main className="flex-1 max-w-xl w-full mx-auto px-4 pt-12 pb-12 flex flex-col items-center justify-center text-center">
+          <span className="material-symbols-outlined text-[48px] text-ink-tertiary mb-2">error_outline</span>
+          <h2 className="font-headline-sm text-headline-sm text-ink-primary font-semibold mb-1">
+            {error || 'Bài đăng không tồn tại'}
+          </h2>
+          <button
+            onClick={() => router.push('/')}
+            className="mt-4 px-4 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-sm"
+          >
+            Quay lại trang chủ
+          </button>
+        </main>
+      </div>
+    );
+  }
+
+  // Price formatting
+  const isRent = listing.saleType === 'RENT';
+  const priceNum = isRent ? Number(listing.monthlyRent || 0) : Number(listing.salePrice || 0);
+  const formattedPriceStr = formatVietnamesePrice(priceNum);
 
   // Location string
   const locationStr = [
