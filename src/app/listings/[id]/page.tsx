@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { formatVietnamesePrice, formatRelativeTime } from '@/components/ListingCard';
@@ -255,6 +255,51 @@ export default function ListingDetailPage() {
     setActiveImageIndex((prev) => (prev < totalImages - 1 ? prev + 1 : 0));
   };
 
+  const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  // Smoothly scroll active thumbnail into view when index changes
+  useEffect(() => {
+    if (thumbnailRefs.current[safeIndex]) {
+      thumbnailRefs.current[safeIndex]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'nearest',
+      });
+    }
+  }, [safeIndex]);
+
+  // Keyboard navigation (< and >, ArrowLeft and ArrowRight)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger when user is typing in form controls
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.tagName === 'SELECT' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      if (totalImages <= 1 || showDeleteModal) return;
+
+      if (e.key === 'ArrowLeft' || e.key === '<' || e.key === ',') {
+        e.preventDefault();
+        setActiveImageIndex((prev) => (prev > 0 ? prev - 1 : totalImages - 1));
+      } else if (e.key === 'ArrowRight' || e.key === '>' || e.key === '.') {
+        e.preventDefault();
+        setActiveImageIndex((prev) => (prev < totalImages - 1 ? prev + 1 : 0));
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [totalImages, showDeleteModal]);
+
   // Location string
   const locationStr = [
     listing.ward?.name,
@@ -332,7 +377,8 @@ export default function ListingDetailPage() {
                 {totalImages > 1 && (
                   <button
                     type="button"
-                    aria-label="Ảnh trước"
+                    aria-label="Ảnh trước (hoặc phím < / ←)"
+                    title="Ảnh trước (< hoặc ←)"
                     onClick={handlePrevImage}
                     className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-surface-card/85 hover:bg-surface-card text-ink-primary backdrop-blur-md shadow-md flex items-center justify-center transition-all opacity-90 hover:opacity-100 hover:scale-110 active:scale-95 z-20 border border-white/20 cursor-pointer"
                   >
@@ -344,7 +390,8 @@ export default function ListingDetailPage() {
                 {totalImages > 1 && (
                   <button
                     type="button"
-                    aria-label="Ảnh kế tiếp"
+                    aria-label="Ảnh kế tiếp (hoặc phím > / →)"
+                    title="Ảnh kế tiếp (> hoặc →)"
                     onClick={handleNextImage}
                     className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-surface-card/85 hover:bg-surface-card text-ink-primary backdrop-blur-md shadow-md flex items-center justify-center transition-all opacity-90 hover:opacity-100 hover:scale-110 active:scale-95 z-20 border border-white/20 cursor-pointer"
                   >
@@ -366,6 +413,9 @@ export default function ListingDetailPage() {
                   {imageList.map((imgUrl, idx) => (
                     <button
                       key={idx}
+                      ref={(el) => {
+                        thumbnailRefs.current[idx] = el;
+                      }}
                       onClick={() => setActiveImageIndex(idx)}
                       className={`relative w-20 h-20 sm:w-22 sm:h-22 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all cursor-pointer ${safeIndex === idx
                           ? 'border-primary ring-2 ring-primary/20 shadow-sm scale-[1.02]'
