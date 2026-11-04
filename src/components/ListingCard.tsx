@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export interface ListingCardProps {
@@ -144,7 +144,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
   hostAvatar,
   createdAt,
   isFavorite: initialFavorite = false,
-  compact = false,
+  compact = true,
   onFavoriteToggle,
   onContactClick,
   onHostClick,
@@ -154,7 +154,12 @@ export const ListingCard: React.FC<ListingCardProps> = ({
 }) => {
   const router = useRouter();
   const [favorite, setFavorite] = useState(initialFavorite);
+  const [copied, setCopied] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    setFavorite(initialFavorite);
+  }, [initialFavorite]);
 
   const timeAgoStr = createdAt ? formatRelativeTime(createdAt) : '';
 
@@ -185,6 +190,27 @@ export const ListingCard: React.FC<ListingCardProps> = ({
     setFavorite(!favorite);
     if (onFavoriteToggle) {
       onFavoriteToggle(id);
+    }
+  };
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (typeof window === 'undefined') return;
+    const shareUrl = `${window.location.origin}/listings/${id}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = shareUrl;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -241,27 +267,20 @@ export const ListingCard: React.FC<ListingCardProps> = ({
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
 
-          {/* Favorite / Bookmark Button (Top Right) */}
-          <button
-            type="button"
-            aria-label={favorite ? "Bỏ lưu tin" : "Lưu tin đăng"}
-            onClick={handleFavorite}
-            className={`absolute top-2.5 right-2.5 w-7.5 h-7.5 rounded-full bg-surface-card/90 hover:bg-surface-card backdrop-blur-md flex items-center justify-center transition-all shadow-xs z-20 active:scale-90 border border-border-subtle/50 hover:scale-105 ${
-              favorite ? 'text-amber-500' : 'text-ink-primary hover:text-amber-500'
-            }`}
-          >
-            <svg
-              className={`w-3.5 h-3.5 transition-transform duration-150 ${favorite ? 'scale-105' : ''}`}
-              viewBox="0 0 24 24"
-              fill={favorite ? 'currentColor' : 'none'}
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          {/* Category / Property Type Badge (Top Right of Image) */}
+          {categoryBadge && (
+            <span
+              className={`absolute top-2.5 right-2.5 z-20 font-semibold text-[10px] sm:text-[11px] px-2.5 py-0.5 rounded-full shadow-sm pointer-events-none ${
+                tag?.includes('từ chối')
+                  ? 'bg-rose-500 text-white'
+                  : tag?.includes('kiểm duyệt')
+                  ? 'bg-amber-400 text-neutral-900'
+                  : 'bg-yellow-400 text-neutral-900'
+              }`}
             >
-              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-            </svg>
-          </button>
+              {categoryBadge}
+            </span>
+          )}
 
           {/* Navigation Arrows on Hover */}
           {totalImages > 1 && (
@@ -293,29 +312,16 @@ export const ListingCard: React.FC<ListingCardProps> = ({
           )}
         </div>
 
-        {/* Card Body - Exactly matching the reference image layout */}
+        {/* Card Body */}
         <div className="p-3.5 sm:p-4 flex flex-col gap-2 flex-1 justify-between">
           <div className="flex flex-col gap-1">
-            {/* Row 1: Title & Category Pill Badge */}
-            <div className="flex items-start justify-between gap-1.5">
-              <h3 
-                className="font-semibold text-ink-primary text-[13.5px] sm:text-[14.5px] line-clamp-1 hover:text-accent-warm transition-colors leading-snug flex-1" 
-                title={title}
-              >
-                {title}
-              </h3>
-              {categoryBadge && (
-                <span className={`shrink-0 font-semibold text-[10px] sm:text-[11px] px-2 py-0.5 rounded-full shadow-2xs ${
-                  tag?.includes('từ chối')
-                    ? 'bg-rose-500 text-white'
-                    : tag?.includes('kiểm duyệt')
-                    ? 'bg-amber-400 text-neutral-900'
-                    : 'bg-yellow-400 text-neutral-900'
-                }`}>
-                  {categoryBadge}
-                </span>
-              )}
-            </div>
+            {/* Row 1: Title */}
+            <h3 
+              className="font-semibold text-ink-primary text-[13.5px] sm:text-[14.5px] line-clamp-1 hover:text-accent-warm transition-colors leading-snug" 
+              title={title}
+            >
+              {title}
+            </h3>
 
             {/* Row 2: Location (Pin icon + Location text) */}
             <p className="flex items-center gap-1 text-ink-secondary text-[11px] sm:text-xs line-clamp-1 pt-0.5">
@@ -326,25 +332,105 @@ export const ListingCard: React.FC<ListingCardProps> = ({
             </p>
           </div>
 
-          {/* Row 3: Price in Emerald Green & optional specsAction */}
+          {/* Row 3: Price + Area (Left) & Save + Share Buttons (Bottom Right) */}
           <div className="pt-0.5 flex items-center justify-between gap-2 flex-wrap">
-            <div className="flex items-baseline gap-1 text-emerald-600 font-bold text-sm sm:text-base">
-              <span>{formattedPriceStr}</span>
-              {saleType === 'RENT' && (
-                <span className="text-[11px] sm:text-xs text-ink-secondary font-normal">/{period}</span>
+            <div className="flex items-baseline gap-1.5 min-w-0 flex-wrap">
+              <div className="flex items-baseline text-emerald-600 font-bold text-sm sm:text-base">
+                <span>{formattedPriceStr}</span>
+                {saleType === 'RENT' && (
+                  <span className="text-[11px] sm:text-xs text-ink-secondary font-normal">/{period}</span>
+                )}
+              </div>
+              {Boolean(area && Number(area) > 0) && (
+                <span className="text-xs sm:text-[13px] font-semibold text-ink-secondary">
+                  {area}m2
+                </span>
               )}
               {isDealable && (
-                <span className="font-medium text-[10px] text-accent-warm bg-accent-warm/10 px-1.5 py-0.5 rounded ml-1">
+                <span className="font-medium text-[10px] text-accent-warm bg-accent-warm/10 px-1.5 py-0.5 rounded">
                   Thương lượng
                 </span>
               )}
             </div>
-            {specsAction && (
-              <div onClick={(e) => e.stopPropagation()} className="shrink-0">
-                {specsAction}
-              </div>
-            )}
+
+            {/* Save (Left) & Share (Right) Action Buttons */}
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-1.5 shrink-0 ml-auto"
+            >
+              <button
+                type="button"
+                aria-label={favorite ? 'Bỏ lưu tin' : 'Lưu tin đăng'}
+                title={favorite ? 'Bỏ lưu tin' : 'Lưu tin đăng'}
+                onClick={handleFavorite}
+                className={`w-7.5 h-7.5 rounded-full flex items-center justify-center transition-all active:scale-90 border cursor-pointer ${
+                  favorite
+                    ? 'text-amber-500 bg-amber-500/10 border-amber-500/30 hover:bg-amber-500/20'
+                    : 'text-ink-secondary hover:text-amber-500 bg-surface-container/70 hover:bg-surface-container border-border-subtle/60'
+                }`}
+              >
+                <svg
+                  className={`w-3.5 h-3.5 transition-transform duration-150 ${favorite ? 'scale-105' : ''}`}
+                  viewBox="0 0 24 24"
+                  fill={favorite ? 'currentColor' : 'none'}
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                </svg>
+              </button>
+
+              <button
+                type="button"
+                aria-label="Chia sẻ tin đăng"
+                title={copied ? 'Đã sao chép liên kết!' : 'Chia sẻ tin đăng'}
+                onClick={handleShare}
+                className={`w-7.5 h-7.5 rounded-full flex items-center justify-center transition-all active:scale-90 border cursor-pointer ${
+                  copied
+                    ? 'text-emerald-600 bg-emerald-500/10 border-emerald-500/30'
+                    : 'text-ink-secondary hover:text-ink-primary bg-surface-container/70 hover:bg-surface-container border-border-subtle/60'
+                }`}
+              >
+                {copied ? (
+                  <svg
+                    className="w-3.5 h-3.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-3.5 h-3.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="18" cy="5" r="3" />
+                    <circle cx="6" cy="12" r="3" />
+                    <circle cx="18" cy="19" r="3" />
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
+
+          {specsAction && (
+            <div onClick={(e) => e.stopPropagation()} className="pt-0.5 flex justify-end">
+              {specsAction}
+            </div>
+          )}
 
           {/* Optional extra footer (moderation reasons, etc.) */}
           {extraFooter && (

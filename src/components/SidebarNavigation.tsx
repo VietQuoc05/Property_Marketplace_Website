@@ -231,7 +231,7 @@ export const SidebarNavigation: React.FC = () => {
 
     return (
       <>
-        <aside className="fixed top-0 bottom-0 left-0 z-40 h-screen w-16 md:w-60 lg:w-64 bg-surface-card border-r border-border-subtle flex flex-col justify-between py-6 px-2.5 md:px-3 select-none transition-all duration-200">
+        <aside className="fixed top-0 bottom-0 left-0 z-40 h-screen w-16 md:w-52 lg:w-56 bg-surface-card border-r border-border-subtle flex flex-col justify-between py-6 px-2.5 md:px-3 select-none transition-all duration-200">
           {/* Top: Logo & Main Navigation List */}
           <div className="flex flex-col gap-6">
             {/* Logo Area */}

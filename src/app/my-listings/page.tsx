@@ -170,7 +170,7 @@ export default function MyListingsPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-surface">
-      <main className="flex-1 w-full pt-4 pb-16 max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="flex-1 w-full pt-4 pb-16 max-w-[1800px] 2xl:max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between pt-4 pb-2">
           <div>
             <h1 className="font-headline-md text-headline-md text-ink-primary font-semibold">
@@ -189,8 +189,8 @@ export default function MyListingsPage() {
 
         <div className="mt-4">
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <ListingCardSkeleton key={i} />
               ))}
             </div>
@@ -206,7 +206,7 @@ export default function MyListingsPage() {
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
               {listings.map((item) => {
                 const isRent = item.saleType === 'RENT';
                 const priceNum = isRent ? Number(item.monthlyRent || 0) : Number(item.salePrice || 0);

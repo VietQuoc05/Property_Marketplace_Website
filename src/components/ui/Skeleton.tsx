@@ -19,21 +19,18 @@ export function Skeleton({
  */
 export function ListingCardSkeleton({ compact = true }: { compact?: boolean }) {
   return (
-    <article className="bg-surface-card rounded-[20px] overflow-hidden border border-border-subtle shadow-xs flex flex-col animate-pulse">
+    <article className="bg-surface-card rounded-2xl overflow-hidden border border-border-subtle shadow-xs flex flex-col animate-pulse">
       {/* Hero Image Container */}
       <div className="relative w-full aspect-[4/3] bg-surface-container">
-        {/* Bookmark circle */}
-        <div className="absolute top-2.5 right-2.5 w-7.5 h-7.5 rounded-full bg-surface-container-high/80" />
+        {/* Category pill badge at top right */}
+        <div className="absolute top-2.5 right-2.5 h-5 w-16 rounded-full bg-surface-container-high/80" />
       </div>
 
       {/* Card Body */}
       <div className="p-3.5 sm:p-4 flex flex-col gap-2.5 flex-1 justify-between">
         <div className="flex flex-col gap-1.5">
-          {/* Row 1: Title & Category Badge */}
-          <div className="flex items-center justify-between gap-2">
-            <div className="h-4 bg-surface-container-high/90 rounded-md w-3/4" />
-            <div className="h-4 bg-surface-container rounded-full w-14 shrink-0" />
-          </div>
+          {/* Row 1: Title */}
+          <div className="h-4 bg-surface-container-high/90 rounded-md w-4/5" />
 
           {/* Row 2: Location */}
           <div className="flex items-center gap-1.5 mt-0.5">
@@ -42,9 +39,16 @@ export function ListingCardSkeleton({ compact = true }: { compact?: boolean }) {
           </div>
         </div>
 
-        {/* Row 3: Price */}
+        {/* Row 3: Price + Area & Save/Share buttons */}
         <div className="pt-1 flex items-center justify-between gap-2">
-          <div className="h-5 bg-surface-container-high/90 rounded w-24" />
+          <div className="flex items-center gap-2">
+            <div className="h-5 bg-surface-container-high/90 rounded w-24" />
+            <div className="h-4 bg-surface-container rounded w-10" />
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-7.5 h-7.5 rounded-full bg-surface-container-high/80" />
+            <div className="w-7.5 h-7.5 rounded-full bg-surface-container-high/80" />
+          </div>
         </div>
       </div>
     </article>

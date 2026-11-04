@@ -537,8 +537,8 @@ export default function Home() {
           </section>
 
           {/* Skeleton Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5 sm:gap-4 lg:gap-4.5 mt-8">
-            {Array.from({ length: 10 }).map((_, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-4.5 lg:gap-5 mt-8">
+            {Array.from({ length: 8 }).map((_, i) => (
               <ListingCardSkeleton key={`auth-skeleton-${i}`} />
             ))}
           </div>
@@ -694,10 +694,10 @@ export default function Home() {
             )}
           </div>
 
-          {/* Listing Cards Grid (5xN) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5 sm:gap-4 lg:gap-4.5 mt-2">
+          {/* Listing Cards Grid (4xN) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-4.5 lg:gap-5 mt-2">
             {loadingListings ? (
-              Array.from({ length: 10 }).map((_, i) => (
+              Array.from({ length: 8 }).map((_, i) => (
                 <ListingCardSkeleton key={`feed-skeleton-${i}`} />
               ))
             ) : listings.length === 0 ? (

@@ -658,7 +658,7 @@ export default function ListingDetailPage() {
       </main>
 
       {/* Floating Bottom Action Bar on Mobile/Tablet */}
-      <footer className="lg:hidden fixed bottom-0 left-16 md:left-60 right-0 z-30 bg-surface-parchment/95 backdrop-blur-xl border-t border-border-subtle py-2.5 px-4 shadow-[0_-4px_16px_rgba(0,0,0,0.05)]">
+      <footer className="lg:hidden fixed bottom-0 left-16 md:left-52 right-0 z-30 bg-surface-parchment/95 backdrop-blur-xl border-t border-border-subtle py-2.5 px-4 shadow-[0_-4px_16px_rgba(0,0,0,0.05)]">
         <div className="max-w-xl mx-auto flex items-center gap-3">
           {isOwner ? (
             <button

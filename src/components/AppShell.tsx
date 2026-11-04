@@ -19,7 +19,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   return (
     <div className="flex min-h-screen bg-surface">
       <SidebarNavigation />
-      <div className="flex-1 w-full pl-16 md:pl-60 lg:pl-64 min-h-screen flex flex-col transition-all duration-200">
+      <div className="flex-1 w-full pl-16 md:pl-52 lg:pl-56 min-h-screen flex flex-col transition-all duration-200">
         {children}
       </div>
     </div>
