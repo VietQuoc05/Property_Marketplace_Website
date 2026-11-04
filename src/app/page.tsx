@@ -666,8 +666,8 @@ export default function Home() {
         </section>
 
         {/* Content Section */}
-        <div className="flex flex-col gap-4 pt-4">
-          <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-2.5 pt-2.5">
+          <div className="flex flex-col gap-1">
             <h1 className="font-headline-md text-headline-md text-ink-primary font-semibold">
               Gợi ý cho bạn hôm nay
             </h1>
@@ -695,7 +695,7 @@ export default function Home() {
           </div>
 
           {/* Listing Cards Grid (4xN) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-4.5 lg:gap-5 mt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4 mt-1">
             {loadingListings ? (
               Array.from({ length: 8 }).map((_, i) => (
                 <ListingCardSkeleton key={`feed-skeleton-${i}`} />

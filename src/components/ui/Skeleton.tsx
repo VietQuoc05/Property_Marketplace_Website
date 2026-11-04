@@ -21,13 +21,13 @@ export function ListingCardSkeleton({ compact = true }: { compact?: boolean }) {
   return (
     <article className="bg-surface-card rounded-2xl overflow-hidden border border-border-subtle shadow-xs flex flex-col animate-pulse">
       {/* Hero Image Container */}
-      <div className="relative w-full aspect-[4/3] bg-surface-container">
+      <div className="relative w-full aspect-[16/9] bg-surface-container">
         {/* Category pill badge at top right */}
         <div className="absolute top-2.5 right-2.5 h-5 w-16 rounded-full bg-surface-container-high/80" />
       </div>
 
       {/* Card Body */}
-      <div className="p-3.5 sm:p-4 flex flex-col gap-2.5 flex-1 justify-between">
+      <div className="p-3 sm:p-3.5 flex flex-col gap-1.5 flex-1 justify-between">
         <div className="flex flex-col gap-1.5">
           {/* Row 1: Title */}
           <div className="h-4 bg-surface-container-high/90 rounded-md w-4/5" />
