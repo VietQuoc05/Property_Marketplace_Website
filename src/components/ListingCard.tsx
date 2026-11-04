@@ -332,7 +332,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
             </p>
           </div>
 
-          {/* Row 3: Price + Area (Left) & Save + Share Buttons (Bottom Right) */}
+          {/* Row 3: Price + Area (Left) & Time Ago + Save + Share Buttons (Bottom Right) */}
           <div className="pt-0.5 flex items-center justify-between gap-2 flex-wrap">
             <div className="flex items-baseline gap-1.5 min-w-0 flex-wrap">
               <div className="flex items-baseline text-emerald-600 font-bold text-sm sm:text-base">
@@ -343,7 +343,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
               </div>
               {Boolean(area && Number(area) > 0) && (
                 <span className="text-xs sm:text-[13px] font-semibold text-ink-secondary">
-                  {area}m2
+                  {area}m²
                 </span>
               )}
               {isDealable && (
@@ -353,11 +353,16 @@ export const ListingCard: React.FC<ListingCardProps> = ({
               )}
             </div>
 
-            {/* Save (Left) & Share (Right) Action Buttons */}
+            {/* Time Ago + Save (Left) & Share (Right) Action Buttons */}
             <div
               onClick={(e) => e.stopPropagation()}
               className="flex items-center gap-1.5 shrink-0 ml-auto"
             >
+              {timeAgoStr && (
+                <span className="text-[11px] sm:text-xs text-ink-tertiary font-medium mr-0.5 whitespace-nowrap">
+                  {timeAgoStr}
+                </span>
+              )}
               <button
                 type="button"
                 aria-label={favorite ? 'Bỏ lưu tin' : 'Lưu tin đăng'}
