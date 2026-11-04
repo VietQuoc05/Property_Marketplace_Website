@@ -667,12 +667,12 @@ export default function Home() {
 
         {/* Content Section */}
         <div className="flex flex-col gap-2.5 pt-2.5">
-          <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-3 flex-wrap">
             <h1 className="font-headline-md text-headline-md text-ink-primary font-semibold">
               Gợi ý cho bạn hôm nay
             </h1>
 
-            {/* Filter detail summary line with funnel icon */}
+            {/* Filter detail summary inline to the right of heading */}
             {filterSummaryText && (
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="material-symbols-outlined text-[18px] text-accent-warm flex-shrink-0 select-none">
@@ -684,7 +684,7 @@ export default function Home() {
                 {hasActiveFilters && (
                   <button
                     onClick={handleResetFilters}
-                    className="text-accent-warm hover:underline text-xs font-medium ml-1 inline-flex items-center gap-0.5"
+                    className="text-accent-warm hover:underline text-xs font-medium ml-1 inline-flex items-center gap-0.5 cursor-pointer"
                     title="Xóa bộ lọc"
                   >
                     <span>(Bỏ lọc)</span>
