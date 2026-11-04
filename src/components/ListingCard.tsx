@@ -356,10 +356,10 @@ export const ListingCard: React.FC<ListingCardProps> = ({
             {/* Time Ago + Save (Left) & Share (Right) Action Buttons */}
             <div
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5 shrink-0 ml-auto"
+              className="flex items-center gap-2 shrink-0 ml-auto"
             >
               {timeAgoStr && (
-                <span className="text-[11px] sm:text-xs text-ink-tertiary font-medium mr-0.5 whitespace-nowrap">
+                <span className="text-xs sm:text-[13px] text-ink-tertiary font-medium mr-0.5 whitespace-nowrap">
                   {timeAgoStr}
                 </span>
               )}
@@ -368,14 +368,14 @@ export const ListingCard: React.FC<ListingCardProps> = ({
                 aria-label={favorite ? 'Bỏ lưu tin' : 'Lưu tin đăng'}
                 title={favorite ? 'Bỏ lưu tin' : 'Lưu tin đăng'}
                 onClick={handleFavorite}
-                className={`w-7.5 h-7.5 rounded-full flex items-center justify-center transition-all active:scale-90 border cursor-pointer ${
+                className={`w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all active:scale-90 border cursor-pointer ${
                   favorite
                     ? 'text-amber-500 bg-amber-500/10 border-amber-500/30 hover:bg-amber-500/20'
                     : 'text-ink-secondary hover:text-amber-500 bg-surface-container/70 hover:bg-surface-container border-border-subtle/60'
                 }`}
               >
                 <svg
-                  className={`w-3.5 h-3.5 transition-transform duration-150 ${favorite ? 'scale-105' : ''}`}
+                  className={`w-4 h-4 sm:w-[17px] sm:h-[17px] transition-transform duration-150 ${favorite ? 'scale-105' : ''}`}
                   viewBox="0 0 24 24"
                   fill={favorite ? 'currentColor' : 'none'}
                   stroke="currentColor"
@@ -392,7 +392,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
                 aria-label="Chia sẻ tin đăng"
                 title={copied ? 'Đã sao chép liên kết!' : 'Chia sẻ tin đăng'}
                 onClick={handleShare}
-                className={`w-7.5 h-7.5 rounded-full flex items-center justify-center transition-all active:scale-90 border cursor-pointer ${
+                className={`w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all active:scale-90 border cursor-pointer ${
                   copied
                     ? 'text-emerald-600 bg-emerald-500/10 border-emerald-500/30'
                     : 'text-ink-secondary hover:text-ink-primary bg-surface-container/70 hover:bg-surface-container border-border-subtle/60'
@@ -400,7 +400,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
               >
                 {copied ? (
                   <svg
-                    className="w-3.5 h-3.5"
+                    className="w-4 h-4 sm:w-[17px] sm:h-[17px]"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -412,7 +412,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
                   </svg>
                 ) : (
                   <svg
-                    className="w-3.5 h-3.5"
+                    className="w-4 h-4 sm:w-[17px] sm:h-[17px]"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"

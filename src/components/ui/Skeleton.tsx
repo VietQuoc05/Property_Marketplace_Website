@@ -45,9 +45,9 @@ export function ListingCardSkeleton({ compact = true }: { compact?: boolean }) {
             <div className="h-5 bg-surface-container-high/90 rounded w-24" />
             <div className="h-4 bg-surface-container rounded w-10" />
           </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-7.5 h-7.5 rounded-full bg-surface-container-high/80" />
-            <div className="w-7.5 h-7.5 rounded-full bg-surface-container-high/80" />
+          <div className="flex items-center gap-2">
+            <div className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full bg-surface-container-high/80" />
+            <div className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full bg-surface-container-high/80" />
           </div>
         </div>
       </div>
