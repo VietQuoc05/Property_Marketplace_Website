@@ -343,7 +343,7 @@ export default function ListingDetailPage() {
             {/* Gallery Content */}
             <div className="flex-1 min-w-0 flex flex-col gap-3">
               {/* Main Hero Image */}
-              <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-surface-container border border-border-subtle shadow-sm group select-none">
+              <div className="relative w-full aspect-[4/3] max-h-[54vh] rounded-2xl overflow-hidden bg-surface-container border border-border-subtle shadow-sm group select-none">
                 <img
                   key={mainDisplayImage}
                   src={mainDisplayImage}

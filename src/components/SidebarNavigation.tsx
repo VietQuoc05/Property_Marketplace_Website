@@ -231,17 +231,17 @@ export const SidebarNavigation: React.FC = () => {
 
     return (
       <>
-        <aside className="fixed top-0 bottom-0 left-0 z-40 h-screen w-16 md:w-52 lg:w-56 bg-surface-card border-r border-border-subtle flex flex-col justify-between py-6 px-2.5 md:px-3 select-none transition-all duration-200">
+        <aside className="fixed top-0 bottom-0 left-0 z-40 h-screen w-16 md:w-52 lg:w-56 bg-surface-card border-r border-border-subtle flex flex-col justify-between py-3.5 xl:py-5 px-2.5 md:px-3 select-none transition-all duration-200">
           {/* Top: Logo & Main Navigation List */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3.5 xl:gap-5 flex-1 min-h-0">
             {/* Logo Area */}
-            <div className="px-2 pt-1 pb-1">
+            <div className="px-2 pt-0.5 pb-0.5 shrink-0">
               <a href="/" onClick={handleLogoClick} className="flex items-center gap-2 group cursor-pointer">
                 {/* Full wordmark logo on desktop */}
                 <img
                   src="/logo.svg"
                   alt="Homers"
-                  className="hidden md:block h-8 w-auto object-contain transition-transform group-hover:scale-105"
+                  className="hidden md:block h-7 xl:h-8 w-auto object-contain transition-transform group-hover:scale-105"
                 />
                 {/* Compact icon logo on mobile */}
                 <img
@@ -253,7 +253,7 @@ export const SidebarNavigation: React.FC = () => {
             </div>
 
             {/* Navigation Items (Instagram-styled in exact order) */}
-            <nav className="flex flex-col gap-1.5">
+            <nav className="flex flex-col gap-1 xl:gap-1.5 flex-1 min-h-0 overflow-y-auto no-scrollbar">
               {/* 1. Home */}
               {(() => {
                 const isHomeActive = pathname === '/' || (
@@ -282,16 +282,16 @@ export const SidebarNavigation: React.FC = () => {
                       }
                     }}
                     title="Trang chủ"
-                    className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${
+                    className={`flex items-center justify-center md:justify-start gap-3.5 px-3 py-2.5 rounded-xl transition-all duration-150 group ${
                       isHomeActive
                         ? 'font-bold text-ink-primary bg-surface-container/60'
                         : 'font-medium text-ink-primary hover:bg-surface-container/50'
                     }`}
                   >
-                  <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
+                  <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
                     {isHomeActive ? (
                       <svg
-                        className="w-[26px] h-[26px] transition-transform group-hover:scale-105"
+                        className="w-6 h-6 transition-transform group-hover:scale-105"
                         viewBox="0 0 24 24"
                         fill="currentColor"
                       >
@@ -299,7 +299,7 @@ export const SidebarNavigation: React.FC = () => {
                       </svg>
                     ) : (
                       <svg
-                        className="w-[26px] h-[26px] transition-transform group-hover:scale-105"
+                        className="w-6 h-6 transition-transform group-hover:scale-105"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -311,7 +311,7 @@ export const SidebarNavigation: React.FC = () => {
                       </svg>
                     )}
                   </div>
-              <span className={`hidden md:inline-block text-[15px] leading-none ${isHomeActive ? 'font-bold' : 'font-medium'}`}>
+              <span className={`hidden md:inline-block text-[0.9375rem] leading-none ${isHomeActive ? 'font-bold' : 'font-medium'}`}>
                 Trang chủ
               </span>
             </Link>
@@ -325,14 +325,14 @@ export const SidebarNavigation: React.FC = () => {
                 <Link
                   href="/forum"
                   title="Diễn đàn"
-                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${isActive
+                  className={`flex items-center justify-center md:justify-start gap-3.5 px-3 py-2.5 rounded-xl transition-all duration-150 group ${isActive
                       ? 'font-bold text-ink-primary bg-surface-container/60'
                       : 'font-medium text-ink-primary hover:bg-surface-container/50'
                     }`}
                 >
-                  <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
+                  <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
                     <svg
-                      className="w-[26px] h-[26px] transition-transform group-hover:scale-105"
+                      className="w-6 h-6 transition-transform group-hover:scale-105"
                       viewBox="0 0 24 24"
                       fill={isActive ? 'currentColor' : 'none'}
                       stroke="currentColor"
@@ -343,7 +343,7 @@ export const SidebarNavigation: React.FC = () => {
                       <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                     </svg>
                   </div>
-                  <span className={`hidden md:inline-block text-[15px] leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>
+                  <span className={`hidden md:inline-block text-[0.9375rem] leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>
                     Diễn đàn
                   </span>
                 </Link>
@@ -357,14 +357,14 @@ export const SidebarNavigation: React.FC = () => {
                 <Link
                   href={user ? '/my-listings' : '/login'}
                   title="Tin của tôi"
-                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${isActive
+                  className={`flex items-center justify-center md:justify-start gap-3.5 px-3 py-2.5 rounded-xl transition-all duration-150 group ${isActive
                       ? 'font-bold text-ink-primary bg-surface-container/60'
                       : 'font-medium text-ink-primary hover:bg-surface-container/50'
                     }`}
                 >
-                  <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
+                  <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
                     <svg
-                      className="w-[26px] h-[26px] transition-transform group-hover:scale-105"
+                      className="w-6 h-6 transition-transform group-hover:scale-105"
                       viewBox="0 0 24 24"
                       fill={isActive ? 'currentColor' : 'none'}
                       stroke="currentColor"
@@ -378,7 +378,7 @@ export const SidebarNavigation: React.FC = () => {
                       <line x1="7" y1="16" x2="13" y2="16" stroke={isActive ? 'var(--color-surface, #fff)' : 'currentColor'} />
                     </svg>
                   </div>
-                  <span className={`hidden md:inline-block text-[15px] leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>
+                  <span className={`hidden md:inline-block text-[0.9375rem] leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>
                     Tin của tôi
                   </span>
                 </Link>
@@ -394,14 +394,14 @@ export const SidebarNavigation: React.FC = () => {
                 <Link
                   href={user ? '/messages' : '/login'}
                   title="Tin nhắn"
-                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${isActive
+                  className={`flex items-center justify-center md:justify-start gap-3.5 px-3 py-2.5 rounded-xl transition-all duration-150 group ${isActive
                       ? 'font-bold text-ink-primary bg-surface-container/60'
                       : 'font-medium text-ink-primary hover:bg-surface-container/50'
                     }`}
                 >
-                  <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center relative">
+                  <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center relative">
                     <svg
-                      className="w-[26px] h-[26px] transition-transform group-hover:scale-105"
+                      className="w-6 h-6 transition-transform group-hover:scale-105"
                       viewBox="0 0 24 24"
                       fill={isActive ? 'currentColor' : 'none'}
                       stroke="currentColor"
@@ -422,7 +422,7 @@ export const SidebarNavigation: React.FC = () => {
                       </span>
                     )}
                   </div>
-                  <span className={`hidden md:inline-block text-[15px] leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>
+                  <span className={`hidden md:inline-block text-[0.9375rem] leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>
                     Tin nhắn
                   </span>
                 </Link>
@@ -436,14 +436,14 @@ export const SidebarNavigation: React.FC = () => {
                 <Link
                   href={user ? '/favorites' : '/login'}
                   title="Tin đã lưu"
-                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${isActive
+                  className={`flex items-center justify-center md:justify-start gap-3.5 px-3 py-2.5 rounded-xl transition-all duration-150 group ${isActive
                       ? 'font-bold text-ink-primary bg-surface-container/60'
                       : 'font-medium text-ink-primary hover:bg-surface-container/50'
                     }`}
                 >
-                  <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
+                  <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
                     <svg
-                      className="w-[26px] h-[26px] transition-transform group-hover:scale-105"
+                      className="w-6 h-6 transition-transform group-hover:scale-105"
                       viewBox="0 0 24 24"
                       fill={isActive ? 'currentColor' : 'none'}
                       stroke="currentColor"
@@ -454,7 +454,7 @@ export const SidebarNavigation: React.FC = () => {
                       <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
                     </svg>
                   </div>
-                  <span className={`hidden md:inline-block text-[15px] leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>
+                  <span className={`hidden md:inline-block text-[0.9375rem] leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>
                     Tin đã lưu
                   </span>
                 </Link>
@@ -472,14 +472,14 @@ export const SidebarNavigation: React.FC = () => {
                 setIsNotifOpen((prev) => !prev);
               }}
               title="Thông báo"
-              className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group text-left w-full relative ${isNotifOpen
+              className={`flex items-center justify-center md:justify-start gap-3.5 px-3 py-2.5 rounded-xl transition-all duration-150 group text-left w-full relative ${isNotifOpen
                   ? 'font-bold text-ink-primary bg-surface-container/60'
                   : 'font-medium text-ink-primary hover:bg-surface-container/50'
                 }`}
             >
-              <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center relative">
+              <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center relative">
                 <svg
-                  className="w-[26px] h-[26px] transition-transform group-hover:scale-105"
+                  className="w-6 h-6 transition-transform group-hover:scale-105"
                   viewBox="0 0 24 24"
                   fill={isNotifOpen ? 'currentColor' : 'none'}
                   stroke="currentColor"
@@ -496,7 +496,7 @@ export const SidebarNavigation: React.FC = () => {
                   </span>
                 )}
               </div>
-              <span className={`hidden md:inline-block text-[15px] leading-none ${isNotifOpen ? 'font-bold' : 'font-medium'}`}>
+              <span className={`hidden md:inline-block text-[0.9375rem] leading-none ${isNotifOpen ? 'font-bold' : 'font-medium'}`}>
                 Thông báo
               </span>
             </button>
@@ -508,14 +508,14 @@ export const SidebarNavigation: React.FC = () => {
                 <Link
                   href={user ? '/create-listing' : '/login'}
                   title="Tạo tin"
-                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${isActive
+                  className={`flex items-center justify-center md:justify-start gap-3.5 px-3 py-2.5 rounded-xl transition-all duration-150 group ${isActive
                       ? 'font-bold text-ink-primary bg-surface-container/60'
                       : 'font-medium text-ink-primary hover:bg-surface-container/50'
                     }`}
                 >
-                  <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
+                  <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
                     <svg
-                      className="w-[26px] h-[26px] transition-transform group-hover:scale-105"
+                      className="w-6 h-6 transition-transform group-hover:scale-105"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -528,7 +528,7 @@ export const SidebarNavigation: React.FC = () => {
                       <line x1="8" y1="12" x2="16" y2="12" />
                     </svg>
                   </div>
-                  <span className={`hidden md:inline-block text-[15px] leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>
+                  <span className={`hidden md:inline-block text-[0.9375rem] leading-none ${isActive ? 'font-bold' : 'font-medium'}`}>
                     Tạo tin
                   </span>
                 </Link>
@@ -542,24 +542,24 @@ export const SidebarNavigation: React.FC = () => {
                 <Link
                   href={user ? '/profile' : '/login'}
                   title="Trang cá nhân"
-                  className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group ${isActive
+                  className={`flex items-center justify-center md:justify-start gap-3.5 px-3 py-2.5 rounded-xl transition-all duration-150 group ${isActive
                       ? 'font-bold text-ink-primary bg-surface-container/60'
                       : 'font-medium text-ink-primary hover:bg-surface-container/50'
                     }`}
                 >
-                  <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
+                  <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
                     {fullAvatarUrl ? (
                       <img
                         src={fullAvatarUrl}
                         alt={user?.fullName || 'User'}
-                        className={`w-[26px] h-[26px] rounded-full object-cover transition-all ${isActive
+                        className={`w-6 h-6 rounded-full object-cover transition-all ${isActive
                             ? 'ring-2 ring-ink-primary ring-offset-2 scale-105'
                             : 'ring-1 ring-border-subtle group-hover:scale-105'
                           }`}
                       />
                     ) : (
                       <div
-                        className={`w-[26px] h-[26px] rounded-full bg-primary text-on-primary flex items-center justify-center text-xs font-semibold ${isActive
+                        className={`w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center text-xs font-semibold ${isActive
                             ? 'ring-2 ring-ink-primary ring-offset-2 scale-105'
                             : 'group-hover:scale-105'
                           }`}
@@ -568,7 +568,7 @@ export const SidebarNavigation: React.FC = () => {
                       </div>
                     )}
                   </div>
-                  <span className={`hidden md:inline-block text-[15px] leading-none truncate max-w-[140px] ${isActive ? 'font-bold' : 'font-medium'}`}>
+                  <span className={`hidden md:inline-block text-[0.9375rem] leading-none truncate max-w-[140px] ${isActive ? 'font-bold' : 'font-medium'}`}>
                     {user?.fullName || 'Đăng nhập'}
                   </span>
                 </Link>
@@ -610,12 +610,12 @@ export const SidebarNavigation: React.FC = () => {
             type="button"
             onClick={() => setIsMoreOpen(!isMoreOpen)}
             title="Xem thêm"
-            className={`flex items-center justify-center md:justify-start gap-4 px-3 py-3 rounded-xl transition-all duration-150 group text-ink-primary hover:bg-surface-container/50 w-full ${isMoreOpen ? 'bg-surface-container/60 font-bold' : 'font-medium'
+            className={`flex items-center justify-center md:justify-start gap-3.5 px-3 py-2.5 rounded-xl transition-all duration-150 group text-ink-primary hover:bg-surface-container/50 w-full ${isMoreOpen ? 'bg-surface-container/60 font-bold' : 'font-medium'
               }`}
           >
-            <div className="w-[26px] h-[26px] flex-shrink-0 flex items-center justify-center">
+            <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
               <svg
-                className="w-[26px] h-[26px] transition-transform group-hover:scale-105"
+                className="w-6 h-6 transition-transform group-hover:scale-105"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -628,7 +628,7 @@ export const SidebarNavigation: React.FC = () => {
                 <line x1="3" y1="18" x2="21" y2="18" />
               </svg>
             </div>
-            <span className="hidden md:inline-block text-[15px] leading-none font-medium">
+            <span className="hidden md:inline-block text-[0.9375rem] leading-none font-medium">
               Xem thêm
             </span>
           </button>

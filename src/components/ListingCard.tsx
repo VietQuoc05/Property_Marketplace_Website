@@ -270,7 +270,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
           {/* Category / Property Type Badge (Top Right of Image) */}
           {categoryBadge && (
             <span
-              className={`absolute top-2.5 right-2.5 z-20 font-semibold text-[10px] sm:text-[11px] px-2.5 py-0.5 rounded-full shadow-sm pointer-events-none ${
+              className={`absolute top-2.5 right-2.5 z-20 font-semibold text-[0.6875rem] px-2.5 py-0.5 rounded-full shadow-sm pointer-events-none ${
                 tag?.includes('từ chối')
                   ? 'bg-rose-500 text-white'
                   : tag?.includes('kiểm duyệt')
@@ -279,6 +279,13 @@ export const ListingCard: React.FC<ListingCardProps> = ({
               }`}
             >
               {categoryBadge}
+            </span>
+          )}
+
+          {/* Dealable Badge (Top Left of Image if present) */}
+          {isDealable && (
+            <span className="absolute top-2.5 left-2.5 z-20 font-semibold text-[0.625rem] text-white bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-full shadow-xs pointer-events-none border border-white/10">
+              Thương lượng
             </span>
           )}
 
@@ -291,7 +298,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
                 onClick={handlePrevImage}
                 className="absolute left-1.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-surface-card/90 hover:bg-surface-card text-ink-primary backdrop-blur-md shadow-xs flex items-center justify-center transition-all opacity-0 group-hover/media:opacity-100 hover:scale-105 active:scale-95 z-20 border border-white/20"
               >
-                <span className="material-symbols-outlined text-[15px]">chevron_left</span>
+                <span className="material-symbols-outlined text-[0.9375rem]">chevron_left</span>
               </button>
               <button
                 type="button"
@@ -299,33 +306,33 @@ export const ListingCard: React.FC<ListingCardProps> = ({
                 onClick={handleNextImage}
                 className="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-surface-card/90 hover:bg-surface-card text-ink-primary backdrop-blur-md shadow-xs flex items-center justify-center transition-all opacity-0 group-hover/media:opacity-100 hover:scale-105 active:scale-95 z-20 border border-white/20"
               >
-                <span className="material-symbols-outlined text-[15px]">chevron_right</span>
+                <span className="material-symbols-outlined text-[0.9375rem]">chevron_right</span>
               </button>
             </>
           )}
 
           {/* Photo Counter Badge (Bottom Right) */}
           {totalImages > 0 && (
-            <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-xs flex items-center justify-center z-10 pointer-events-none tracking-wide border border-white/10">
+            <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-md text-white text-[0.625rem] font-semibold px-2 py-0.5 rounded-full shadow-xs flex items-center justify-center z-10 pointer-events-none tracking-wide border border-white/10">
               <span>{safeIndex + 1}/{totalImages}</span>
             </div>
           )}
         </div>
 
         {/* Card Body */}
-        <div className="p-3 sm:p-3.5 flex flex-col gap-1.5 flex-1 justify-between">
+        <div className="p-3 xl:p-3.5 flex flex-col gap-1.5 flex-1 justify-between">
           <div className="flex flex-col gap-0.5">
             {/* Row 1: Title */}
             <h3 
-              className="font-semibold text-ink-primary text-[13.5px] sm:text-[14px] line-clamp-1 hover:text-accent-warm transition-colors leading-snug" 
+              className="font-semibold text-ink-primary text-[0.875rem] line-clamp-1 hover:text-accent-warm transition-colors leading-snug" 
               title={title}
             >
               {title}
             </h3>
 
             {/* Row 2: Location (Pin icon + Location text) */}
-            <p className="flex items-center gap-1 text-ink-secondary text-[11px] sm:text-xs line-clamp-1 pt-0.5">
-              <span className="material-symbols-outlined text-[14px] text-ink-tertiary shrink-0">
+            <p className="flex items-center gap-1 text-ink-secondary text-xs line-clamp-1 pt-0.5">
+              <span className="material-symbols-outlined text-[0.875rem] text-ink-tertiary shrink-0">
                 location_on
               </span>
               <span className="truncate">{location}</span>
@@ -333,22 +340,17 @@ export const ListingCard: React.FC<ListingCardProps> = ({
           </div>
 
           {/* Row 3: Price + Area (Left) & Time Ago + Save + Share Buttons (Bottom Right) */}
-          <div className="pt-0.5 flex items-center justify-between gap-2 flex-wrap">
-            <div className="flex items-baseline gap-1.5 min-w-0 flex-wrap">
-              <div className="flex items-baseline text-emerald-600 font-bold text-sm sm:text-base">
+          <div className="pt-0.5 flex items-center justify-between gap-1.5 flex-nowrap">
+            <div className="flex items-baseline gap-1.5 min-w-0 overflow-hidden">
+              <div className="flex items-baseline text-emerald-600 font-bold text-[0.9375rem] xl:text-base whitespace-nowrap truncate">
                 <span>{formattedPriceStr}</span>
                 {saleType === 'RENT' && (
-                  <span className="text-[11px] sm:text-xs text-ink-secondary font-normal">/{period}</span>
+                  <span className="text-xs text-ink-secondary font-normal">/{period}</span>
                 )}
               </div>
               {Boolean(area && Number(area) > 0) && (
-                <span className="text-xs sm:text-[13px] font-semibold text-ink-secondary">
+                <span className="text-xs xl:text-[0.8125rem] font-semibold text-ink-secondary whitespace-nowrap shrink-0">
                   {area}m²
-                </span>
-              )}
-              {isDealable && (
-                <span className="font-medium text-[10px] text-accent-warm bg-accent-warm/10 px-1.5 py-0.5 rounded">
-                  Thương lượng
                 </span>
               )}
             </div>
@@ -356,10 +358,10 @@ export const ListingCard: React.FC<ListingCardProps> = ({
             {/* Time Ago + Save (Left) & Share (Right) Action Buttons */}
             <div
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-2 shrink-0 ml-auto"
+              className="flex items-center gap-1.5 shrink-0 ml-auto"
             >
               {timeAgoStr && (
-                <span className="text-xs sm:text-[13px] text-ink-tertiary font-medium mr-0.5 whitespace-nowrap">
+                <span className="text-xs xl:text-[0.8125rem] text-ink-tertiary font-medium mr-0.5 whitespace-nowrap">
                   {timeAgoStr}
                 </span>
               )}
@@ -368,14 +370,14 @@ export const ListingCard: React.FC<ListingCardProps> = ({
                 aria-label={favorite ? 'Bỏ lưu tin' : 'Lưu tin đăng'}
                 title={favorite ? 'Bỏ lưu tin' : 'Lưu tin đăng'}
                 onClick={handleFavorite}
-                className={`w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all active:scale-90 border cursor-pointer ${
+                className={`w-8 h-8 xl:w-9 xl:h-9 rounded-full flex items-center justify-center transition-all active:scale-90 border cursor-pointer ${
                   favorite
                     ? 'text-amber-500 bg-amber-500/10 border-amber-500/30 hover:bg-amber-500/20'
                     : 'text-ink-secondary hover:text-amber-500 bg-surface-container/70 hover:bg-surface-container border-border-subtle/60'
                 }`}
               >
                 <svg
-                  className={`w-4 h-4 sm:w-[17px] sm:h-[17px] transition-transform duration-150 ${favorite ? 'scale-105' : ''}`}
+                  className={`w-4 h-4 xl:w-[1.0625rem] xl:h-[1.0625rem] transition-transform duration-150 ${favorite ? 'scale-105' : ''}`}
                   viewBox="0 0 24 24"
                   fill={favorite ? 'currentColor' : 'none'}
                   stroke="currentColor"
@@ -392,7 +394,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
                 aria-label="Chia sẻ tin đăng"
                 title={copied ? 'Đã sao chép liên kết!' : 'Chia sẻ tin đăng'}
                 onClick={handleShare}
-                className={`w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all active:scale-90 border cursor-pointer ${
+                className={`w-8 h-8 xl:w-9 xl:h-9 rounded-full flex items-center justify-center transition-all active:scale-90 border cursor-pointer ${
                   copied
                     ? 'text-emerald-600 bg-emerald-500/10 border-emerald-500/30'
                     : 'text-ink-secondary hover:text-ink-primary bg-surface-container/70 hover:bg-surface-container border-border-subtle/60'
@@ -400,7 +402,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
               >
                 {copied ? (
                   <svg
-                    className="w-4 h-4 sm:w-[17px] sm:h-[17px]"
+                    className="w-4 h-4 xl:w-[1.0625rem] xl:h-[1.0625rem]"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -412,7 +414,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
                   </svg>
                 ) : (
                   <svg
-                    className="w-4 h-4 sm:w-[17px] sm:h-[17px]"
+                    className="w-4 h-4 xl:w-[1.0625rem] xl:h-[1.0625rem]"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
