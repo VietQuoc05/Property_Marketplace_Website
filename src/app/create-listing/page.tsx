@@ -342,7 +342,7 @@ export default function CreateListingPage() {
 
                 {/* Main Hero Image Preview or Dropzone */}
                 {imagePreviews.length > 0 ? (
-                  <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-surface-container border border-border-subtle shadow-sm group select-none">
+                  <div className="relative w-full aspect-[4/3] max-h-[48vh] rounded-2xl overflow-hidden bg-surface-container border border-border-subtle shadow-sm group select-none">
                     <img
                       src={imagePreviews[activePreviewIndex] || imagePreviews[0]}
                       alt="Preview"
@@ -404,7 +404,7 @@ export default function CreateListingPage() {
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
-                    className={`relative w-full aspect-[4/3] rounded-2xl border-2 border-dashed flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-all ${isDragging
+                    className={`relative w-full aspect-[4/3] max-h-[48vh] rounded-2xl border-2 border-dashed flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-all ${isDragging
                         ? 'border-primary bg-primary/5 scale-[1.01]'
                         : 'border-border-strong hover:border-primary bg-surface-container/30 hover:bg-surface-container/60'
                       }`}

@@ -2455,7 +2455,7 @@ function MessagesContent() {
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink-primary/30 backdrop-blur-sm animate-fade-in">
           <div
-            className="w-full max-w-lg bg-surface-card rounded-3xl shadow-2xl border border-border-subtle overflow-hidden flex flex-col"
+            className="w-full max-w-lg max-h-[90vh] bg-surface-card rounded-3xl shadow-2xl border border-border-subtle overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
@@ -2477,7 +2477,7 @@ function MessagesContent() {
             </div>
 
             {/* Modal Form */}
-            <form onSubmit={handleCreateContract} className="p-6 flex flex-col gap-4">
+            <form onSubmit={handleCreateContract} className="p-6 flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto">
               {createError && (
                 <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 text-xs font-medium">
                   {createError}

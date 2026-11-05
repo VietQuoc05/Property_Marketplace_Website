@@ -734,11 +734,11 @@ export default function ForumPage() {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div
-            className="bg-surface-card rounded-3xl border border-border-subtle shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200"
+            className="bg-surface-card rounded-3xl border border-border-subtle shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
             role="dialog"
             aria-modal="true"
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-border-subtle">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border-subtle shrink-0">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary text-[22px]">post_add</span>
                 <h3 className="font-bold text-lg text-ink-primary">Đăng tin tìm kiếm</h3>
@@ -752,7 +752,7 @@ export default function ForumPage() {
               </button>
             </div>
 
-            <form onSubmit={handleCreatePost} className="p-6 flex flex-col gap-4 max-h-[85vh] overflow-y-auto">
+            <form onSubmit={handleCreatePost} className="p-6 flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto">
               {formError && (
                 <div className="p-3.5 rounded-xl bg-error-container/40 border border-error/20 text-error text-sm flex items-start gap-2">
                   <span className="material-symbols-outlined text-[18px] flex-shrink-0 mt-0.5">error</span>
