@@ -11,6 +11,7 @@ export default function AuthPage() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -60,6 +61,12 @@ export default function AuthPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (!agreedToTerms) {
+      setError('Vui lòng đồng ý với Điều khoản dịch vụ & Chính sách bảo mật của Homers.');
+      return;
+    }
+
     setLoading(true);
 
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
@@ -98,6 +105,10 @@ export default function AuthPage() {
   };
 
   const handleSocialLogin = (provider: 'google' | 'facebook') => {
+    if (!agreedToTerms) {
+      setError('Vui lòng đồng ý với Điều khoản dịch vụ & Chính sách bảo mật của Homers.');
+      return;
+    }
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
     window.location.href = `${apiUrl}/auth/${provider}`;
   };
@@ -266,14 +277,43 @@ export default function AuthPage() {
           </Button>
         </div>
 
-        <div className="mt-auto pt-space-md text-center">
-          <p className="font-body-sm text-body-sm text-ink-secondary leading-relaxed">
-            Bằng việc tiếp tục, bạn đồng ý với{' '}
-            <a href="#" className="text-ink-primary font-medium underline">Điều khoản dịch vụ</a>{' '}
-            &amp;{' '}
-            <a href="#" className="text-ink-primary font-medium underline">Chính sách bảo mật</a>{' '}
-            của Homers.
-          </p>
+        <div className="mt-auto pt-space-md flex items-center justify-center">
+          <label
+            htmlFor="agreeTerms"
+            className="inline-flex items-start gap-2 cursor-pointer select-none text-left"
+          >
+            <input
+              type="checkbox"
+              id="agreeTerms"
+              checked={agreedToTerms}
+              onChange={(e) => {
+                setAgreedToTerms(e.target.checked);
+                if (e.target.checked && error.includes('Điều khoản dịch vụ')) {
+                  setError('');
+                }
+              }}
+              className="mt-0.5 w-4 h-4 accent-primary rounded border-border-strong cursor-pointer shrink-0"
+            />
+            <span className="font-body-sm text-body-sm text-ink-secondary leading-relaxed">
+              Tôi đồng ý với{' '}
+              <a
+                href="#"
+                onClick={(e) => e.stopPropagation()}
+                className="text-ink-primary font-medium underline"
+              >
+                Điều khoản dịch vụ
+              </a>{' '}
+              &amp;{' '}
+              <a
+                href="#"
+                onClick={(e) => e.stopPropagation()}
+                className="text-ink-primary font-medium underline"
+              >
+                Chính sách bảo mật
+              </a>{' '}
+              của Homers.
+            </span>
+          </label>
         </div>
       </div>
     </main>
