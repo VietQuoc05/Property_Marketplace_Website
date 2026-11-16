@@ -38,7 +38,7 @@ export function getListingTypeLabel(type?: string): string {
     case 'APARTMENT':
       return 'Căn hộ';
     case 'HOUSE':
-      return 'Nhà phố';
+      return 'Nhà';
     case 'ROOM':
       return 'Phòng trọ';
     case 'OFFICE':

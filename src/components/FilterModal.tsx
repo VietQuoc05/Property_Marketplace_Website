@@ -316,7 +316,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
   const propertyTypes = [
     { label: 'Tất cả', value: '' },
     { label: 'Căn hộ/Chung cư', value: 'APARTMENT' },
-    { label: 'Nhà phố', value: 'HOUSE' },
+    { label: 'Nhà', value: 'HOUSE' },
     { label: 'Đất', value: 'LAND' },
     { label: 'Trọ', value: 'ROOM' },
     { label: 'Mặt bằng/Văn phòng', value: 'OFFICE' },

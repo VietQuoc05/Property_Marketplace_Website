@@ -26,7 +26,7 @@ export interface FilterState {
 
 export const LISTING_TYPE_SLUGS: Record<string, { slug: string; label: string }> = {
   APARTMENT: { slug: 'can-ho-chung-cu', label: 'Căn hộ/Chung cư' },
-  HOUSE: { slug: 'nha-pho', label: 'Nhà phố' },
+  HOUSE: { slug: 'nha', label: 'Nhà' },
   LAND: { slug: 'dat', label: 'Đất' },
   ROOM: { slug: 'tro', label: 'Trọ' },
   OFFICE: { slug: 'mat-bang-van-phong', label: 'Mặt bằng/Văn phòng' },
@@ -246,7 +246,8 @@ export async function parseFilterUrl(
 
   // Helper matchers
   const isSaleTypeSlug = (s: string) => s === 'cho-thue' || s === 'can-ban' || s === 'cho-thue-can-ban';
-  const isListingTypeSlug = (s: string) => Object.values(LISTING_TYPE_SLUGS).some((item) => item.slug === s);
+  const isListingTypeSlug = (s: string) =>
+    s === 'nha-pho' || Object.values(LISTING_TYPE_SLUGS).some((item) => item.slug === s);
 
   for (const seg of segments) {
     // Check if segment is saleType
@@ -259,6 +260,10 @@ export async function parseFilterUrl(
 
     // Check if segment is listingType
     if (isListingTypeSlug(seg)) {
+      if (seg === 'nha-pho') {
+        filters.listingType = 'HOUSE';
+        continue;
+      }
       const found = Object.entries(LISTING_TYPE_SLUGS).find(([, item]) => item.slug === seg);
       if (found) {
         filters.listingType = found[0];

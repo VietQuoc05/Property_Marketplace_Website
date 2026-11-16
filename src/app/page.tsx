@@ -63,7 +63,7 @@ export default function Home() {
   const filterOptions = [
     { label: 'Tất cả', type: null },
     { label: 'Căn hộ/Chung cư', type: 'APARTMENT' },
-    { label: 'Nhà phố', type: 'HOUSE' },
+    { label: 'Nhà', type: 'HOUSE' },
     { label: 'Đất', type: 'LAND' },
     { label: 'Trọ', type: 'ROOM' },
     { label: 'Mặt bằng/Văn phòng', type: 'OFFICE' },
