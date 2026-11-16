@@ -622,7 +622,7 @@ export default function ListingDetailPage() {
                             className="flex-1 h-11 rounded-full bg-surface-card border border-border-strong text-ink-primary font-label-md text-sm font-semibold flex items-center justify-center gap-2 hover:bg-surface-container transition-colors shadow-2xs"
                           >
                             <span className="material-symbols-outlined text-[18px]">call</span>
-                            Gọi {host.phone}
+                            Gọi điện thoại
                           </a>
                         ) : null}
 
@@ -672,7 +672,7 @@ export default function ListingDetailPage() {
                   className="flex-1 h-11 rounded-full bg-surface-card border border-border-strong text-ink-primary font-label-md text-label-md font-semibold flex items-center justify-center gap-2 hover:bg-surface-container transition-colors"
                 >
                   <span className="material-symbols-outlined text-[20px]">call</span>
-                  Gọi {host.phone}
+                  Gọi điện thoại
                 </a>
               ) : null}
 
