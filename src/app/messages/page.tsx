@@ -2195,7 +2195,7 @@ function MessagesContent() {
                 {/* Pending Attached Listing Preview */}
                 {pendingListing && (
                   <div className="flex items-center gap-3 p-2.5 bg-surface-card rounded-2xl border border-primary/40 shadow-xs relative animate-in fade-in duration-200">
-                    <div className="w-12 h-12 rounded-xl overflow-hidden bg-surface-container flex-shrink-0 relative">
+                    <div className="w-15 h-15 sm:w-16 sm:h-16 rounded-xl overflow-hidden bg-surface-container flex-shrink-0 relative">
                       {pendingListing.imageUrl ? (
                         <img
                           src={
