@@ -38,11 +38,8 @@ const amenitiesList = [
   { value: 'POOL', label: 'Hồ bơi', icon: 'pool' },
   { value: 'GYM', label: 'Phòng Gym', icon: 'fitness_center' },
   { value: 'PARK', label: 'Công viên', icon: 'park' },
-  { value: 'STORE', label: 'Cửa hàng tiện lợi', icon: 'storefront' },
   { value: 'SCHOOL', label: 'Trường học', icon: 'school' },
   { value: 'HOSPITAL', label: 'Bệnh viện', icon: 'local_hospital' },
-  { value: 'YARD', label: 'Sân vườn', icon: 'yard' },
-  { value: 'CAFE', label: 'Quán Cafe', icon: 'local_cafe' },
   { value: 'STATION', label: 'Bến xe / Ga tàu', icon: 'directions_bus' },
 ];
 

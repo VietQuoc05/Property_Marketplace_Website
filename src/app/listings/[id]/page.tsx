@@ -41,11 +41,8 @@ const amenityLabels: Record<string, { label: string; icon: string }> = {
   POOL: { label: 'Hồ bơi', icon: 'pool' },
   GYM: { label: 'Phòng Gym', icon: 'fitness_center' },
   PARK: { label: 'Công viên', icon: 'park' },
-  STORE: { label: 'Cửa hàng tiện lợi', icon: 'storefront' },
   SCHOOL: { label: 'Trường học', icon: 'school' },
   HOSPITAL: { label: 'Bệnh viện', icon: 'local_hospital' },
-  YARD: { label: 'Sân vườn', icon: 'yard' },
-  CAFE: { label: 'Quán Cafe', icon: 'local_cafe' },
   STATION: { label: 'Bến xe / Ga tàu', icon: 'directions_bus' },
 };
 
@@ -568,7 +565,7 @@ export default function ListingDetailPage() {
               )}
 
               {/* Amenities Section */}
-              {listing.amenities && listing.amenities.length > 0 && (
+              {listing.amenities && listing.amenities.some((itemKey) => Boolean(amenityLabels[itemKey])) && (
                 <div className="flex flex-col gap-3 pt-4 border-t border-border-subtle">
                   <h2 className="font-headline-sm font-semibold text-base text-ink-primary flex items-center gap-2">
                     <span className="material-symbols-outlined text-[20px] text-accent-warm">star</span>
@@ -576,18 +573,20 @@ export default function ListingDetailPage() {
                   </h2>
 
                   <div className="grid grid-cols-3 gap-2">
-                    {listing.amenities.map((itemKey) => {
-                      const info = amenityLabels[itemKey] || { label: itemKey, icon: 'check_circle' };
-                      return (
-                        <div
-                          key={itemKey}
-                          className="flex flex-col items-center justify-center p-2.5 rounded-xl bg-surface-container/60 border border-border-subtle text-ink-primary text-center"
-                        >
-                          <span className="material-symbols-outlined text-[22px] text-accent-warm mb-1">{info.icon}</span>
-                          <span className="font-label-sm text-[11px] font-medium leading-tight">{info.label}</span>
-                        </div>
-                      );
-                    })}
+                    {listing.amenities
+                      .filter((itemKey) => Boolean(amenityLabels[itemKey]))
+                      .map((itemKey) => {
+                        const info = amenityLabels[itemKey];
+                        return (
+                          <div
+                            key={itemKey}
+                            className="flex flex-col items-center justify-center p-2.5 rounded-xl bg-surface-container/60 border border-border-subtle text-ink-primary text-center"
+                          >
+                            <span className="material-symbols-outlined text-[22px] text-accent-warm mb-1">{info.icon}</span>
+                            <span className="font-label-sm text-[11px] font-medium leading-tight">{info.label}</span>
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
               )}
