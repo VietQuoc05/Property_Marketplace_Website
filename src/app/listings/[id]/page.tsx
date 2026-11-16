@@ -272,6 +272,16 @@ export default function ListingDetailPage() {
     };
   }, [totalImages, showDeleteModal]);
 
+  // Update browser tab title to match the listing title
+  useEffect(() => {
+    if (listing?.title) {
+      document.title = listing.title;
+    }
+    return () => {
+      document.title = 'Homers - Tìm nhà dễ dàng';
+    };
+  }, [listing?.title]);
+
   if (loading) {
     return <ListingDetailSkeleton />;
   }

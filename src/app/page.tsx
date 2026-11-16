@@ -98,6 +98,17 @@ export default function Home() {
     return getFilterSummaryText(activeFilters);
   }, [activeFilters]);
 
+  // Synchronize browser tab title with active filter summary
+  useEffect(() => {
+    document.title = filterSummaryText
+      ? filterSummaryText.replace(/\s*\/\s*/g, ', ')
+      : 'Homers - Tìm nhà dễ dàng';
+
+    return () => {
+      document.title = 'Homers - Tìm nhà dễ dàng';
+    };
+  }, [filterSummaryText]);
+
   // Builds query string for backend API (/feed)
   const buildFeedQueryParams = (
     filterType?: string | null,
