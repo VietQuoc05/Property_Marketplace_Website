@@ -34,7 +34,7 @@ export const LISTING_TYPE_SLUGS: Record<string, { slug: string; label: string }>
 
 export const SALE_TYPE_SLUGS: Record<string, { slug: string; label: string }> = {
   RENT: { slug: 'cho-thue', label: 'Cho thuê' },
-  SALE: { slug: 'can-ban', label: 'Cần bán' },
+  SALE: { slug: 'can-ban', label: 'Bán' },
 };
 
 /**
@@ -167,12 +167,12 @@ export function getFilterSummaryText(filters: FilterState): string | null {
     return null;
   }
 
-  // 1. Transaction: "Cho thuê", "Cần bán", or "Cho thuê/Bán"
+  // 1. Transaction: "Cho thuê", "Bán", or "Cho thuê/Bán"
   let actionText = 'Cho thuê/Bán';
   if (filters.saleType === 'RENT') {
     actionText = 'Cho thuê';
   } else if (filters.saleType === 'SALE') {
-    actionText = 'Cần bán';
+    actionText = 'Bán';
   }
 
   // 2. Listing type: "Căn hộ/Chung cư", "Nhà phố", etc.

@@ -428,7 +428,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
               {[
                 { label: 'Tất cả', value: '' },
                 { label: 'Cho thuê', value: 'RENT' },
-                { label: 'Cần bán', value: 'SALE' },
+                { label: 'Bán', value: 'SALE' },
               ].map((item) => (
                 <button
                   type="button"
