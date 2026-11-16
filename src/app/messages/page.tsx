@@ -2212,20 +2212,15 @@ function MessagesContent() {
                         </div>
                       )}
                     </div>
-                    <div className="flex-1 min-w-0 flex flex-col">
-                      <div className="flex items-center gap-1.5 mb-0.5">
-                        <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-primary text-on-primary">
-                          Đính kèm tin đăng
-                        </span>
-                        <span className="text-[11px] font-bold text-accent-warm">
-                          {pendingListing.saleType === 'RENT'
-                            ? `${Number(pendingListing.monthlyRent || 0).toLocaleString('vi-VN')} ₫/tháng`
-                            : `${Number(pendingListing.salePrice || 0).toLocaleString('vi-VN')} ₫`}
-                        </span>
-                      </div>
+                    <div className="flex-1 min-w-0 flex flex-col gap-0.5">
                       <p className="text-xs font-semibold text-ink-primary truncate" title={pendingListing.title}>
                         {pendingListing.title}
                       </p>
+                      <span className="text-[11px] font-bold text-accent-warm">
+                        {pendingListing.saleType === 'RENT'
+                          ? `${Number(pendingListing.monthlyRent || 0).toLocaleString('vi-VN')} ₫/tháng`
+                          : `${Number(pendingListing.salePrice || 0).toLocaleString('vi-VN')} ₫`}
+                      </span>
                       {pendingListing.address && (
                         <p className="text-[11px] text-ink-secondary truncate">
                           {pendingListing.address}
