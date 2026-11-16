@@ -498,8 +498,8 @@ export default function ListingDetailPage() {
                 )}
 
                 <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <p className="font-body-sm text-body-sm text-ink-secondary flex items-start gap-1.5 flex-1 min-w-0">
-                    <span className="material-symbols-outlined text-[18px] text-accent-warm flex-shrink-0 mt-0.5">
+                  <p className="font-body-sm text-body-sm text-ink-secondary flex items-center gap-1.5 flex-1 min-w-0">
+                    <span className="material-symbols-outlined text-[18px] text-accent-warm flex-shrink-0 leading-none">
                       location_on
                     </span>
                     <span className="truncate">{locationStr}</span>
@@ -516,36 +516,24 @@ export default function ListingDetailPage() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-3 border-t border-border-subtle text-ink-secondary font-body-sm">
                   {!isCommercialOrLand && (
                     <>
-                      <div className="flex items-center gap-2 bg-surface-container/60 p-2.5 rounded-xl border border-border-subtle/80">
-                        <span className="material-symbols-outlined text-[20px] text-accent-warm">bed</span>
-                        <div>
-                          <div className="text-[11px] text-ink-tertiary">Phòng ngủ</div>
-                          <div className="font-semibold text-sm text-ink-primary">{listing.br || 0} PN</div>
-                        </div>
+                      <div className="flex flex-col justify-center bg-surface-container/60 px-3 py-2.5 rounded-xl border border-border-subtle/80">
+                        <div className="text-xs font-semibold text-ink-secondary">Phòng ngủ</div>
+                        <div className="font-bold text-sm text-ink-primary mt-0.5">{listing.br || 0} PN</div>
                       </div>
-                      <div className="flex items-center gap-2 bg-surface-container/60 p-2.5 rounded-xl border border-border-subtle/80">
-                        <span className="material-symbols-outlined text-[20px] text-accent-warm">bathtub</span>
-                        <div>
-                          <div className="text-[11px] text-ink-tertiary">Phòng tắm</div>
-                          <div className="font-semibold text-sm text-ink-primary">{listing.wc || 0} WC</div>
-                        </div>
+                      <div className="flex flex-col justify-center bg-surface-container/60 px-3 py-2.5 rounded-xl border border-border-subtle/80">
+                        <div className="text-xs font-semibold text-ink-secondary">Phòng tắm</div>
+                        <div className="font-bold text-sm text-ink-primary mt-0.5">{listing.wc || 0} WC</div>
                       </div>
                     </>
                   )}
-                  <div className="flex items-center gap-2 bg-surface-container/60 p-2.5 rounded-xl border border-border-subtle/80">
-                    <span className="material-symbols-outlined text-[20px] text-accent-warm">square_foot</span>
-                    <div>
-                      <div className="text-[11px] text-ink-tertiary">Diện tích</div>
-                      <div className="font-semibold text-sm text-ink-primary">{listing.size || 0} m²</div>
-                    </div>
+                  <div className="flex flex-col justify-center bg-surface-container/60 px-3 py-2.5 rounded-xl border border-border-subtle/80">
+                    <div className="text-xs font-semibold text-ink-secondary">Diện tích</div>
+                    <div className="font-bold text-sm text-ink-primary mt-0.5">{listing.size || 0} m²</div>
                   </div>
                   {listing.depositAmount ? (
-                    <div className="flex items-center gap-2 bg-surface-container/60 p-2.5 rounded-xl border border-border-subtle/80">
-                      <span className="material-symbols-outlined text-[20px] text-accent-warm">payments</span>
-                      <div>
-                        <div className="text-[11px] text-ink-tertiary">Tiền đặt cọc</div>
-                        <div className="font-semibold text-sm text-ink-primary">{formatVietnamesePrice(listing.depositAmount)}</div>
-                      </div>
+                    <div className="flex flex-col justify-center bg-surface-container/60 px-3 py-2.5 rounded-xl border border-border-subtle/80">
+                      <div className="text-xs font-semibold text-ink-secondary">Tiền đặt cọc</div>
+                      <div className="font-bold text-sm text-ink-primary mt-0.5">{formatVietnamesePrice(listing.depositAmount)}</div>
                     </div>
                   ) : null}
                 </div>
@@ -554,8 +542,7 @@ export default function ListingDetailPage() {
               {/* Description Section */}
               {listing.description && (
                 <div className="flex flex-col gap-2 pt-4 border-t border-border-subtle">
-                  <h2 className="font-headline-sm font-semibold text-base text-ink-primary flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[20px] text-accent-warm">description</span>
+                  <h2 className="font-headline-sm font-semibold text-base text-ink-primary">
                     Mô tả chi tiết
                   </h2>
                   <p className="font-body-md text-ink-primary leading-relaxed whitespace-pre-line text-sm sm:text-base">
@@ -567,8 +554,7 @@ export default function ListingDetailPage() {
               {/* Amenities Section */}
               {listing.amenities && listing.amenities.some((itemKey) => Boolean(amenityLabels[itemKey])) && (
                 <div className="flex flex-col gap-3 pt-4 border-t border-border-subtle">
-                  <h2 className="font-headline-sm font-semibold text-base text-ink-primary flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[20px] text-accent-warm">star</span>
+                  <h2 className="font-headline-sm font-semibold text-base text-ink-primary">
                     Tiện ích xung quanh
                   </h2>
 
