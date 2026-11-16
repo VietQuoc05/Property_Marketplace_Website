@@ -49,6 +49,24 @@ interface MessageListing {
   address?: string | null;
 }
 
+interface MessageForumPost {
+  id: string;
+  title: string;
+  detail: string;
+  needType?: string | null;
+  needSaleType?: string | null;
+  address?: string | null;
+  authorName?: string | null;
+}
+
+const forumNeedTypeLabels: Record<string, string> = {
+  APARTMENT: 'Căn hộ / Chung cư',
+  HOUSE: 'Nhà riêng / Nguyên căn',
+  LAND: 'Nhà đất / Đất nền',
+  ROOM: 'Phòng trọ / Studio',
+  OFFICE: 'Văn phòng / Mặt bằng',
+};
+
 interface Message {
   id: string;
   conversationId: string;
@@ -56,6 +74,8 @@ interface Message {
   content: string;
   listingId?: string | null;
   listing?: MessageListing | null;
+  forumPostId?: string | null;
+  forumPost?: MessageForumPost | null;
   attachments?: string[];
   sentAt: string;
   sender?: {
@@ -348,6 +368,7 @@ function MessagesContent() {
   const targetContractId = searchParams.get('contractId');
   const targetConvId = searchParams.get('conversationId');
   const targetListingId = searchParams.get('listingId');
+  const targetForumPostId = searchParams.get('forumPostId');
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -366,6 +387,7 @@ function MessagesContent() {
   const [showArchived, setShowArchived] = useState(false);
   const [selectedAttachments, setSelectedAttachments] = useState<PendingAttachment[]>([]);
   const [pendingListing, setPendingListing] = useState<MessageListing | null>(null);
+  const [pendingForumPost, setPendingForumPost] = useState<MessageForumPost | null>(null);
   const [typingUserIds, setTypingUserIds] = useState<Set<string>>(new Set());
   const typingTimeoutsRef = useRef<{ [userId: string]: NodeJS.Timeout }>({});
   const localTypingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -423,6 +445,50 @@ function MessagesContent() {
       isCancelled = true;
     };
   }, [targetListingId, apiUrl]);
+
+  // Fetch Attached Forum Post details if forumPostId is in URL
+  useEffect(() => {
+    if (!targetForumPostId) {
+      setPendingForumPost(null);
+      return;
+    }
+
+    let isCancelled = false;
+
+    async function loadTargetForumPost() {
+      try {
+        const res = await fetch(`${apiUrl}/forum-posts/${targetForumPostId}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (isCancelled) return;
+
+          const addr = [
+            data.ward?.name,
+            data.district?.name,
+            data.city?.name,
+          ].filter(Boolean).join(', ');
+
+          setPendingForumPost({
+            id: data.id,
+            title: data.title,
+            detail: data.detail || '',
+            needType: data.needType || null,
+            needSaleType: data.needSaleType || null,
+            address: addr || null,
+            authorName: data.user?.fullName || null,
+          });
+        }
+      } catch (e) {
+        console.error('Error fetching attached forum post context:', e);
+      }
+    }
+
+    loadTargetForumPost();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [targetForumPostId, apiUrl]);
 
   // Clean up object URLs on unmount
   useEffect(() => {
@@ -1269,7 +1335,7 @@ function MessagesContent() {
   // Handle Send Message
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if ((!inputText.trim() && selectedAttachments.length === 0 && !pendingListing) || !selectedConv || isSending) return;
+    if ((!inputText.trim() && selectedAttachments.length === 0 && !pendingListing && !pendingForumPost) || !selectedConv || isSending) return;
 
     const token = localStorage.getItem('accessToken');
     if (!token) return;
@@ -1277,6 +1343,7 @@ function MessagesContent() {
     const contentToSend = inputText.trim();
     const attachmentsToSend = [...selectedAttachments];
     const listingToSend = pendingListing;
+    const forumPostToSend = pendingForumPost;
 
     // Clear typing indicator for current user
     const socket = getSocket();
@@ -1291,6 +1358,7 @@ function MessagesContent() {
     setInputText('');
     setSelectedAttachments([]);
     setPendingListing(null);
+    setPendingForumPost(null);
     setIsSending(true);
 
     try {
@@ -1302,6 +1370,9 @@ function MessagesContent() {
         }
         if (listingToSend?.id) {
           formData.append('listingId', listingToSend.id);
+        }
+        if (forumPostToSend?.id) {
+          formData.append('forumPostId', forumPostToSend.id);
         }
         attachmentsToSend.forEach((att) => {
           formData.append('files', att.file);
@@ -1324,6 +1395,7 @@ function MessagesContent() {
           body: JSON.stringify({
             content: contentToSend,
             listingId: listingToSend?.id,
+            forumPostId: forumPostToSend?.id,
           }),
         });
       }
@@ -1341,11 +1413,19 @@ function MessagesContent() {
           if (att.previewUrl) URL.revokeObjectURL(att.previewUrl);
         });
 
-        // Clear listingId from URL without reload so subsequent messages aren't tied to it
+        // Clear listingId and forumPostId from URL without reload so subsequent messages aren't tied to them
         if (typeof window !== 'undefined') {
           const url = new URL(window.location.href);
+          let changed = false;
           if (url.searchParams.has('listingId')) {
             url.searchParams.delete('listingId');
+            changed = true;
+          }
+          if (url.searchParams.has('forumPostId')) {
+            url.searchParams.delete('forumPostId');
+            changed = true;
+          }
+          if (changed) {
             window.history.replaceState({}, '', url.pathname + (url.search ? url.search : ''));
           }
           window.dispatchEvent(new CustomEvent('haven:messages-updated'));
@@ -1354,6 +1434,7 @@ function MessagesContent() {
         setInputText(contentToSend);
         setSelectedAttachments(attachmentsToSend);
         setPendingListing(listingToSend);
+        setPendingForumPost(forumPostToSend);
         alert('Gửi tin nhắn thất bại');
       }
     } catch (err) {
@@ -1361,6 +1442,7 @@ function MessagesContent() {
       setInputText(contentToSend);
       setSelectedAttachments(attachmentsToSend);
       setPendingListing(listingToSend);
+      setPendingForumPost(forumPostToSend);
       alert('Không thể kết nối đến máy chủ.');
     } finally {
       setIsSending(false);
@@ -1712,6 +1794,8 @@ function MessagesContent() {
                 let text = lastMsg.content;
                 if (!text && lastMsg.listing) {
                   text = `[Bài đăng: ${lastMsg.listing.title}]`;
+                } else if (!text && lastMsg.forumPost) {
+                  text = `[Bài đăng: ${lastMsg.forumPost.title}]`;
                 } else if (!text && lastMsg.attachments && lastMsg.attachments.length > 0) {
                   text = lastMsg.attachments.some(isImageUrl) ? '[Hình ảnh]' : '[Tệp đính kèm]';
                 }
@@ -2062,6 +2146,47 @@ function MessagesContent() {
                               </div>
                             )}
 
+                            {/* Attached Forum Post Card */}
+                            {msg.forumPost && (
+                              <div
+                                onClick={() => router.push('/forum')}
+                                className="mb-2 w-full max-w-sm rounded-2xl overflow-hidden border border-border-subtle/80 hover:border-primary bg-surface-card transition-all cursor-pointer group shadow-xs hover:shadow-md p-3.5 flex flex-col gap-1.5 text-left"
+                              >
+                                <div className="flex flex-wrap items-center gap-1.5">
+                                  {msg.forumPost.needSaleType && (
+                                    <span
+                                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                        msg.forumPost.needSaleType === 'RENT'
+                                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/80'
+                                          : 'bg-blue-50 text-blue-700 border border-blue-200/80'
+                                      }`}
+                                    >
+                                      {msg.forumPost.needSaleType === 'RENT' ? 'Cần thuê' : 'Cần mua'}
+                                    </span>
+                                  )}
+                                  {msg.forumPost.needType && forumNeedTypeLabels[msg.forumPost.needType] && (
+                                    <span className="px-2 py-0.5 rounded-full bg-surface-container text-ink-primary border border-border-subtle text-[10px] font-semibold">
+                                      {forumNeedTypeLabels[msg.forumPost.needType]}
+                                    </span>
+                                  )}
+                                </div>
+                                <h4 className="text-xs sm:text-sm font-semibold text-ink-primary line-clamp-1 group-hover:text-primary transition-colors">
+                                  {msg.forumPost.title}
+                                </h4>
+                                {msg.forumPost.detail && (
+                                  <p className="text-xs text-ink-secondary line-clamp-2 leading-relaxed">
+                                    {msg.forumPost.detail}
+                                  </p>
+                                )}
+                                {msg.forumPost.address && (
+                                  <p className="text-[11px] text-accent-warm font-medium line-clamp-1 flex items-center gap-1 pt-0.5">
+                                    <span className="material-symbols-outlined text-[13px]">location_on</span>
+                                    {msg.forumPost.address}
+                                  </p>
+                                )}
+                              </div>
+                            )}
+
                             {/* Attachments */}
                             {msg.attachments && msg.attachments.length > 0 && (
                               <div className={`flex flex-col gap-1.5 mb-1.5 w-full ${isMe ? 'items-end' : 'items-start'}`}>
@@ -2241,6 +2366,58 @@ function MessagesContent() {
                       }}
                       className="w-7 h-7 rounded-full flex items-center justify-center text-ink-tertiary hover:text-ink-primary hover:bg-surface-secondary/80 transition-colors"
                       title="Bỏ đính kèm tin đăng"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">close</span>
+                    </button>
+                  </div>
+                )}
+
+                {/* Pending Attached Forum Post Preview */}
+                {pendingForumPost && (
+                  <div className="flex items-center gap-3 p-2.5 bg-surface-card rounded-2xl border border-primary/40 shadow-xs relative animate-in fade-in duration-200">
+                    <div className="w-15 h-15 sm:w-16 sm:h-16 rounded-xl overflow-hidden bg-surface-container flex-shrink-0 flex items-center justify-center text-accent-warm">
+                      <span className="material-symbols-outlined text-[26px]">forum</span>
+                    </div>
+                    <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+                      <p className="text-xs font-semibold text-ink-primary truncate" title={pendingForumPost.title}>
+                        {pendingForumPost.title}
+                      </p>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {pendingForumPost.needSaleType && (
+                          <span className="text-[11px] font-bold text-accent-warm">
+                            {pendingForumPost.needSaleType === 'RENT' ? 'Cần thuê' : 'Cần mua'}
+                          </span>
+                        )}
+                        {pendingForumPost.needType && forumNeedTypeLabels[pendingForumPost.needType] && (
+                          <span className="text-[11px] font-medium text-ink-secondary">
+                            • {forumNeedTypeLabels[pendingForumPost.needType]}
+                          </span>
+                        )}
+                      </div>
+                      {pendingForumPost.address ? (
+                        <p className="text-[11px] text-ink-secondary truncate">
+                          {pendingForumPost.address}
+                        </p>
+                      ) : pendingForumPost.detail ? (
+                        <p className="text-[11px] text-ink-secondary truncate">
+                          {pendingForumPost.detail}
+                        </p>
+                      ) : null}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPendingForumPost(null);
+                        if (typeof window !== 'undefined') {
+                          const url = new URL(window.location.href);
+                          if (url.searchParams.has('forumPostId')) {
+                            url.searchParams.delete('forumPostId');
+                            window.history.replaceState({}, '', url.pathname + (url.search ? url.search : ''));
+                          }
+                        }
+                      }}
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-ink-tertiary hover:text-ink-primary hover:bg-surface-secondary/80 transition-colors"
+                      title="Bỏ đính kèm bài đăng diễn đàn"
                     >
                       <span className="material-symbols-outlined text-[16px]">close</span>
                     </button>

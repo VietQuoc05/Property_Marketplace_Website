@@ -354,7 +354,7 @@ export default function ForumPage() {
   };
 
   // Direct Message to Author
-  const handleContactAuthor = (authorId: string) => {
+  const handleContactAuthor = (authorId: string, postId?: string) => {
     const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
     if (!token) {
       router.push('/login');
@@ -365,7 +365,10 @@ export default function ForumPage() {
       return;
     }
 
-    router.push(`/messages?userId=${authorId}`);
+    const query = postId
+      ? `userId=${authorId}&forumPostId=${postId}`
+      : `userId=${authorId}`;
+    router.push(`/messages?${query}`);
   };
 
   // Filtered posts (supports needSaleType + needType + city filter)
@@ -691,7 +694,7 @@ export default function ForumPage() {
                     {!isOwner && (
                       <button
                         type="button"
-                        onClick={() => handleContactAuthor(post.userId)}
+                        onClick={() => handleContactAuthor(post.userId, post.id)}
                         className="px-3.5 py-1.5 rounded-xl bg-primary text-on-primary font-semibold text-xs sm:text-sm shadow-sm hover:bg-primary/90 active:scale-98 transition-all flex items-center gap-1.5 cursor-pointer group flex-shrink-0"
                       >
                         <svg
