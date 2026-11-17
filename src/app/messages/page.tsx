@@ -2374,10 +2374,7 @@ function MessagesContent() {
 
                 {/* Pending Attached Forum Post Preview */}
                 {pendingForumPost && (
-                  <div className="flex items-center gap-3 p-2.5 bg-surface-card rounded-2xl border border-primary/40 shadow-xs relative animate-in fade-in duration-200">
-                    <div className="w-15 h-15 sm:w-16 sm:h-16 rounded-xl overflow-hidden bg-surface-container flex-shrink-0 flex items-center justify-center text-accent-warm">
-                      <span className="material-symbols-outlined text-[26px]">forum</span>
-                    </div>
+                  <div className="flex items-center gap-3 px-3.5 py-2.5 bg-surface-card rounded-2xl border border-primary/40 shadow-xs relative animate-in fade-in duration-200">
                     <div className="flex-1 min-w-0 flex flex-col gap-0.5">
                       <p className="text-xs font-semibold text-ink-primary truncate" title={pendingForumPost.title}>
                         {pendingForumPost.title}
