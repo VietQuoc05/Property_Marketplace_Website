@@ -606,14 +606,34 @@ export default function ListingDetailPage() {
                   {/* Prominent Action Buttons in Right Column */}
                   <div className="flex flex-col gap-2.5 pt-1">
                     {isOwner ? (
-                      <button
-                        type="button"
-                        onClick={() => setShowDeleteModal(true)}
-                        className="w-full h-11 rounded-full bg-red-600 hover:bg-red-700 text-white font-label-md text-sm font-semibold flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer"
-                      >
-                        <span className="material-symbols-outlined text-[18px]">delete</span>
-                        Gỡ bài đăng
-                      </button>
+                      <>
+                        <button
+                          type="button"
+                          className="w-full h-11 rounded-full bg-primary text-on-primary font-label-md text-sm font-semibold flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity cursor-pointer"
+                        >
+                          <svg
+                            className="w-5 h-5 shrink-0"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M21 11.5L13.5 4v4.5C6.5 9.5 3.5 14 3 20c2.5-3.5 6-5.1 10.5-5.1V19.5L21 11.5z" />
+                          </svg>
+                          Chia sẻ tin này
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setShowDeleteModal(true)}
+                          className="w-full h-11 rounded-full bg-red-600 hover:bg-red-700 text-white font-label-md text-sm font-semibold flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">delete</span>
+                          Gỡ bài đăng
+                        </button>
+                      </>
                     ) : (
                       <>
                         <div className="flex items-center gap-2.5">
@@ -661,9 +681,9 @@ export default function ListingDetailPage() {
                             <svg
                               className="w-5 h-5 shrink-0"
                               viewBox="0 0 24 24"
-                              fill="none"
+                              fill="currentColor"
                               stroke="currentColor"
-                              strokeWidth="2.1"
+                              strokeWidth="1.5"
                               strokeLinecap="round"
                               strokeLinejoin="round"
                             >
