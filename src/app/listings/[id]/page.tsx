@@ -604,7 +604,7 @@ export default function ListingDetailPage() {
                   </div>
 
                   {/* Prominent Action Buttons in Right Column */}
-                  <div className="flex items-center gap-2.5 pt-1">
+                  <div className="flex flex-col gap-2.5 pt-1">
                     {isOwner ? (
                       <button
                         type="button"
@@ -616,32 +616,62 @@ export default function ListingDetailPage() {
                       </button>
                     ) : (
                       <>
-                        {host?.phone ? (
-                          <a
-                            href={`tel:${host.phone}`}
-                            className="flex-1 h-11 rounded-full bg-surface-card border border-border-strong text-ink-primary font-label-md text-sm font-semibold flex items-center justify-center gap-2 hover:bg-surface-container transition-colors shadow-2xs"
-                          >
-                            <span className="material-symbols-outlined text-[18px]">call</span>
-                            Gọi điện thoại
-                          </a>
-                        ) : null}
+                        <div className="flex items-center gap-2.5">
+                          {host?.phone ? (
+                            <a
+                              href={`tel:${host.phone}`}
+                              className="flex-1 h-11 rounded-full bg-surface-card border border-border-strong text-ink-primary font-label-md text-sm font-semibold flex items-center justify-center gap-2 hover:bg-surface-container transition-colors shadow-2xs"
+                            >
+                              <span className="material-symbols-outlined text-[18px]">call</span>
+                              Gọi điện thoại
+                            </a>
+                          ) : null}
 
-                        <button
-                          onClick={() => {
-                            const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
-                            if (!token) {
-                              router.push('/login');
-                              return;
-                            }
-                            if (host?.id) {
-                              router.push(`/messages?userId=${host.id}&listingId=${listing.id}`);
-                            }
-                          }}
-                          className="flex-1 h-11 rounded-full bg-primary text-on-primary font-label-md text-sm font-semibold flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity cursor-pointer"
-                        >
-                          <span className="material-symbols-outlined text-[18px]">chat</span>
-                          Nhắn tin ngay
-                        </button>
+                          <button
+                            onClick={() => {
+                              const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+                              if (!token) {
+                                router.push('/login');
+                                return;
+                              }
+                              if (host?.id) {
+                                router.push(`/messages?userId=${host.id}&listingId=${listing.id}`);
+                              }
+                            }}
+                            className="flex-1 h-11 rounded-full bg-primary text-on-primary font-label-md text-sm font-semibold flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">chat</span>
+                            Nhắn tin ngay
+                          </button>
+                        </div>
+
+                        <div className="flex items-center gap-2.5">
+                          <button
+                            type="button"
+                            className="flex-1 h-11 rounded-full bg-surface-card border border-border-strong text-ink-primary font-label-md text-sm font-semibold flex items-center justify-center gap-2 hover:bg-surface-container transition-colors shadow-2xs cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">phone_callback</span>
+                            Liên hệ cho tôi
+                          </button>
+
+                          <button
+                            type="button"
+                            className="flex-1 h-11 rounded-full bg-surface-card border border-border-strong text-ink-primary font-label-md text-sm font-semibold flex items-center justify-center gap-2 hover:bg-surface-container transition-colors shadow-2xs cursor-pointer"
+                          >
+                            <svg
+                              className="w-4 h-4 shrink-0"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.1"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M21 11.5L13.5 4v4.5C6.5 9.5 3.5 14 3 20c2.5-3.5 6-5.1 10.5-5.1V19.5L21 11.5z" />
+                            </svg>
+                            Chia sẻ tin này
+                          </button>
+                        </div>
                       </>
                     )}
                   </div>
