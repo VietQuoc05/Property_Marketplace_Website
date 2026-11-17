@@ -656,10 +656,10 @@ export default function ListingDetailPage() {
 
                           <button
                             type="button"
-                            className="flex-1 h-11 rounded-full bg-surface-card border border-border-strong text-ink-primary font-label-md text-sm font-semibold flex items-center justify-center gap-2 hover:bg-surface-container transition-colors shadow-2xs cursor-pointer"
+                            className="flex-1 h-11 rounded-full bg-primary text-on-primary font-label-md text-sm font-semibold flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity cursor-pointer"
                           >
                             <svg
-                              className="w-4 h-4 shrink-0"
+                              className="w-5 h-5 shrink-0"
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
