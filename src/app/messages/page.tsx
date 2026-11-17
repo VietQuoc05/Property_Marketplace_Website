@@ -47,6 +47,7 @@ interface MessageListing {
   salePrice?: number | null;
   imageUrl?: string | null;
   address?: string | null;
+  ownerId?: string | null;
 }
 
 interface MessageForumPost {
@@ -57,6 +58,7 @@ interface MessageForumPost {
   needSaleType?: string | null;
   address?: string | null;
   authorName?: string | null;
+  ownerId?: string | null;
 }
 
 const forumNeedTypeLabels: Record<string, string> = {
@@ -432,6 +434,7 @@ function MessagesContent() {
             salePrice: data.salePrice ? Number(data.salePrice) : null,
             imageUrl: img,
             address: addr,
+            ownerId: data.createdBy?.id || data.createdById || targetUserId || null,
           });
         }
       } catch (e) {
@@ -476,6 +479,7 @@ function MessagesContent() {
             needSaleType: data.needSaleType || null,
             address: addr || null,
             authorName: data.user?.fullName || null,
+            ownerId: data.userId || data.user?.id || targetUserId || null,
           });
         }
       } catch (e) {
@@ -489,6 +493,41 @@ function MessagesContent() {
       isCancelled = true;
     };
   }, [targetForumPostId, apiUrl]);
+
+  // Clear attached listing / forum post when switching to a conversation with another user
+  const clearPendingAttachments = () => {
+    setPendingListing(null);
+    setPendingForumPost(null);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      let changed = false;
+      if (url.searchParams.has('listingId')) {
+        url.searchParams.delete('listingId');
+        changed = true;
+      }
+      if (url.searchParams.has('forumPostId')) {
+        url.searchParams.delete('forumPostId');
+        changed = true;
+      }
+      if (changed) {
+        window.history.replaceState({}, '', url.pathname + (url.search ? url.search : ''));
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!selectedConv) return;
+    if (pendingListing?.ownerId) {
+      if (selectedConv.type !== 'DIRECT' || selectedConv.otherUser?.userId !== pendingListing.ownerId) {
+        clearPendingAttachments();
+      }
+    }
+    if (pendingForumPost?.ownerId) {
+      if (selectedConv.type !== 'DIRECT' || selectedConv.otherUser?.userId !== pendingForumPost.ownerId) {
+        clearPendingAttachments();
+      }
+    }
+  }, [selectedConv, pendingListing?.ownerId, pendingForumPost?.ownerId]);
 
   // Clean up object URLs on unmount
   useEffect(() => {
@@ -1600,6 +1639,9 @@ function MessagesContent() {
                       key={`search-${conv.id}`}
                       type="button"
                       onClick={() => {
+                        if (selectedConv?.id !== conv.id) {
+                          clearPendingAttachments();
+                        }
                         setSelectedConv(conv);
                         setSelectedConvId(conv.id);
                         setIsSearchFocused(false);
@@ -1806,6 +1848,9 @@ function MessagesContent() {
                 <div
                   key={conv.id}
                   onClick={() => {
+                    if (selectedConv?.id !== conv.id) {
+                      clearPendingAttachments();
+                    }
                     setSelectedConv(conv);
                     setSelectedConvId(conv.id);
                   }}
@@ -1814,6 +1859,9 @@ function MessagesContent() {
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
+                      if (selectedConv?.id !== conv.id) {
+                        clearPendingAttachments();
+                      }
                       setSelectedConv(conv);
                       setSelectedConvId(conv.id);
                     }
