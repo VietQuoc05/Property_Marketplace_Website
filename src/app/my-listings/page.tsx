@@ -289,31 +289,50 @@ export default function MyListingsPage() {
                     }
                   }}
                   specsAction={
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedListingForInterests({ id: item.id, title: item.title });
-                      }}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-black hover:bg-neutral-800 text-white transition-all text-[12px] font-semibold border border-black/10 group/btn shadow-xs active:scale-95 cursor-pointer"
-                      title="Xem danh sách người quan tâm tin đăng này"
-                    >
-                      <svg
-                        className="w-[13px] h-[13px] text-white group-hover/btn:scale-110 transition-transform flex-shrink-0"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                    <div className="flex items-center justify-between gap-1.5 w-full">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedListingForInterests({ id: item.id, title: item.title });
+                        }}
+                        className="inline-flex items-center gap-1 px-2 xl:px-2.5 py-0.5 rounded-full bg-black hover:bg-neutral-800 text-white transition-all text-xs font-semibold border border-black/10 group/btn shadow-xs active:scale-95 cursor-pointer whitespace-nowrap"
+                        title="Xem danh sách người quan tâm tin đăng này"
                       >
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-                      </svg>
-                      <span className="text-white">{interestCount} người quan tâm</span>
-                      <span className="material-symbols-outlined text-[14px] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">
-                        chevron_right
-                      </span>
-                    </button>
+                        <svg
+                          className="w-3 h-3 text-white group-hover/btn:scale-110 transition-transform flex-shrink-0"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                        </svg>
+                        <span className="text-white">{interestCount} người quan tâm</span>
+                        <span className="material-symbols-outlined text-[0.875rem] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">
+                          chevron_right
+                        </span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                        className="inline-flex items-center gap-1 px-2 xl:px-2.5 py-0.5 rounded-full bg-black hover:bg-neutral-800 text-white transition-all text-xs font-semibold border border-black/10 group/btn shadow-xs active:scale-95 cursor-pointer whitespace-nowrap"
+                        title="Xem danh sách yêu cầu liên hệ"
+                      >
+                        <span className="material-symbols-outlined text-[0.875rem] text-white group-hover/btn:scale-110 transition-transform flex-shrink-0">
+                          phone_callback
+                        </span>
+                        <span className="text-white">Yêu cầu liên hệ</span>
+                        <span className="material-symbols-outlined text-[0.875rem] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">
+                          chevron_right
+                        </span>
+                      </button>
+                    </div>
                   }
                 />
               );

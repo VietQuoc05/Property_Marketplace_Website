@@ -430,7 +430,7 @@ export const ListingCard: React.FC<ListingCardProps> = ({
           </div>
 
           {specsAction && (
-            <div onClick={(e) => e.stopPropagation()} className="pt-0.5 flex justify-end">
+            <div onClick={(e) => e.stopPropagation()} className="pt-0.5 flex items-center justify-end w-full">
               {specsAction}
             </div>
           )}
