@@ -289,14 +289,14 @@ export default function MyListingsPage() {
                     }
                   }}
                   specsAction={
-                    <div className="flex items-center justify-between gap-1.5 w-full">
+                    <div className="grid grid-cols-2 gap-1.5 w-full">
                       <button
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedListingForInterests({ id: item.id, title: item.title });
                         }}
-                        className="inline-flex items-center gap-1 px-2 xl:px-2.5 py-0.5 rounded-full bg-black hover:bg-neutral-800 text-white transition-all text-xs font-semibold border border-black/10 group/btn shadow-xs active:scale-95 cursor-pointer whitespace-nowrap"
+                        className="w-full inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded-full bg-black hover:bg-neutral-800 text-white transition-all text-xs font-semibold border border-black/10 group/btn shadow-xs active:scale-95 cursor-pointer whitespace-nowrap"
                         title="Xem danh sách người quan tâm tin đăng này"
                       >
                         <svg
@@ -321,7 +321,7 @@ export default function MyListingsPage() {
                         onClick={(e) => {
                           e.stopPropagation();
                         }}
-                        className="inline-flex items-center gap-1 px-2 xl:px-2.5 py-0.5 rounded-full bg-black hover:bg-neutral-800 text-white transition-all text-xs font-semibold border border-black/10 group/btn shadow-xs active:scale-95 cursor-pointer whitespace-nowrap"
+                        className="w-full inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded-full bg-black hover:bg-neutral-800 text-white transition-all text-xs font-semibold border border-black/10 group/btn shadow-xs active:scale-95 cursor-pointer whitespace-nowrap"
                         title="Xem danh sách yêu cầu liên hệ"
                       >
                         <svg
@@ -340,7 +340,7 @@ export default function MyListingsPage() {
                             fill="currentColor"
                           />
                         </svg>
-                        <span className="text-white">Yêu cầu liên hệ</span>
+                        <span className="text-white">0 yêu cầu liên hệ</span>
                         <span className="material-symbols-outlined text-[0.875rem] text-white/80 group-hover/btn:translate-x-0.5 transition-transform">
                           chevron_right
                         </span>
