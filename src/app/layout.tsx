@@ -10,7 +10,7 @@ const beVietnamPro = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "Homers - Tìm nhà dễ dàng",
+  title: "Tìm nhà dễ dàng - Homers",
   description: "Tìm không gian sống lý tưởng của bạn tại Việt Nam",
   icons: {
     icon: "/favicon.svg",

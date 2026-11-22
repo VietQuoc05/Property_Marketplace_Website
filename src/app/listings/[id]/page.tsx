@@ -275,7 +275,7 @@ export default function ListingDetailPage() {
       document.title = listing.title;
     }
     return () => {
-      document.title = 'Homers - Tìm nhà dễ dàng';
+      document.title = 'Tìm nhà dễ dàng - Homers';
     };
   }, [listing?.title]);
 

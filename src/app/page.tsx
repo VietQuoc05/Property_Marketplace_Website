@@ -102,10 +102,10 @@ export default function Home() {
   useEffect(() => {
     document.title = filterSummaryText
       ? filterSummaryText.replace(/\s*\/\s*/g, ', ')
-      : 'Homers - Tìm nhà dễ dàng';
+      : 'Tìm nhà dễ dàng - Homers';
 
     return () => {
-      document.title = 'Homers - Tìm nhà dễ dàng';
+      document.title = 'Tìm nhà dễ dàng - Homers';
     };
   }, [filterSummaryText]);
 
