@@ -144,9 +144,10 @@ export const ListingInterestsModal: React.FC<ListingInterestsModalProps> = ({
   const handleOpenDirectChat = (userId: string) => {
     onClose();
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('haven:open-chat', { detail: { userId } }));
+      window.dispatchEvent(new CustomEvent('haven:open-chat', { detail: { userId, listingId } }));
     }
-    router.push(`/messages?userId=${userId}`);
+    const query = listingId ? `userId=${userId}&listingId=${listingId}` : `userId=${userId}`;
+    router.push(`/messages?${query}`);
   };
 
   return (

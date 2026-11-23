@@ -434,7 +434,7 @@ function MessagesContent() {
             salePrice: data.salePrice ? Number(data.salePrice) : null,
             imageUrl: img,
             address: addr,
-            ownerId: data.createdBy?.id || data.createdById || targetUserId || null,
+            ownerId: targetUserId || data.createdBy?.id || data.createdById || null,
           });
         }
       } catch (e) {
@@ -447,7 +447,7 @@ function MessagesContent() {
     return () => {
       isCancelled = true;
     };
-  }, [targetListingId, apiUrl]);
+  }, [targetListingId, targetUserId, apiUrl]);
 
   // Fetch Attached Forum Post details if forumPostId is in URL
   useEffect(() => {
@@ -479,7 +479,7 @@ function MessagesContent() {
             needSaleType: data.needSaleType || null,
             address: addr || null,
             authorName: data.user?.fullName || null,
-            ownerId: data.userId || data.user?.id || targetUserId || null,
+            ownerId: targetUserId || data.userId || data.user?.id || null,
           });
         }
       } catch (e) {
@@ -492,7 +492,7 @@ function MessagesContent() {
     return () => {
       isCancelled = true;
     };
-  }, [targetForumPostId, apiUrl]);
+  }, [targetForumPostId, targetUserId, apiUrl]);
 
   // Clear attached listing / forum post when switching to a conversation with another user
   const clearPendingAttachments = () => {

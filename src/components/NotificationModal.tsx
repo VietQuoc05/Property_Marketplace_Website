@@ -111,14 +111,15 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
     }
   };
 
-  const handleOpenDirectChat = (userId: string) => {
+  const handleOpenDirectChat = (userId: string, targetListingId?: string) => {
     onClose();
     if (typeof window !== 'undefined') {
       window.dispatchEvent(
-        new CustomEvent('haven:open-chat', { detail: { userId } })
+        new CustomEvent('haven:open-chat', { detail: { userId, listingId: targetListingId } })
       );
     }
-    router.push(`/messages?userId=${userId}`);
+    const query = targetListingId ? `userId=${userId}&listingId=${targetListingId}` : `userId=${userId}`;
+    router.push(`/messages?${query}`);
   };
 
   const handleOpenUserProfile = (userId: string) => {
@@ -551,7 +552,7 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (interestedUserId) handleOpenDirectChat(interestedUserId);
+                  if (interestedUserId) handleOpenDirectChat(interestedUserId, listingId);
                 }}
                 className="w-8 h-8 rounded-full bg-surface-container hover:bg-surface-variant text-ink-primary flex items-center justify-center transition-colors shadow-xs"
                 title="Nhắn tin với người quan tâm"
