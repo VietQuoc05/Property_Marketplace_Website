@@ -1544,29 +1544,13 @@ function MessagesContent() {
           selectedConv ? 'hidden md:flex' : 'flex'
         }`}
       >
-        {/* Header: User Handle / Title & Nút Tạo chat hợp đồng */}
+        {/* Header: User Handle / Title */}
         <div className="h-16 px-4 flex items-center justify-between border-b border-border-subtle/70 bg-surface/80 backdrop-blur-md flex-shrink-0">
-          <div className="flex items-center gap-2 cursor-pointer hover:opacity-85 transition-opacity">
-            <span className="font-headline-sm text-lg font-bold text-ink-primary tracking-tight truncate max-w-[220px]">
+          <div className="flex items-center gap-2">
+            <span className="font-headline-sm text-lg font-bold text-ink-primary tracking-tight truncate max-w-[260px]">
               {currentUser?.fullName || 'Tin nhắn'}
             </span>
-            <span className="material-symbols-outlined text-[18px] text-ink-tertiary">
-              keyboard_arrow_down
-            </span>
           </div>
-
-          <button
-            type="button"
-            onClick={() => {
-              setShowCreateModal(true);
-              setCreateError(null);
-              setCreateSuccess(null);
-            }}
-            title="Tạo đoạn chat hợp đồng mới"
-            className="w-9 h-9 rounded-full flex items-center justify-center text-ink-primary hover:bg-surface-container active:scale-95 transition-all"
-          >
-            <span className="material-symbols-outlined text-[20px]">edit_square</span>
-          </button>
         </div>
 
         {/* Search Bar with Floating Results Dropdown */}
@@ -2606,21 +2590,9 @@ function MessagesContent() {
             <h2 className="font-headline-sm text-xl font-bold text-ink-primary mb-1.5">
               Tin nhắn của bạn
             </h2>
-            <p className="font-body-md text-sm text-ink-secondary max-w-sm mb-6">
-              Chọn một cuộc trò chuyện từ danh sách bên trái hoặc tạo đoạn chat hợp đồng mới để bắt đầu kết nối.
+            <p className="font-body-md text-sm text-ink-secondary max-w-sm">
+              Chọn một cuộc trò chuyện từ danh sách bên trái để bắt đầu kết nối.
             </p>
-            <button
-              type="button"
-              onClick={() => {
-                setShowCreateModal(true);
-                setCreateError(null);
-                setCreateSuccess(null);
-              }}
-              className="px-5 py-2.5 rounded-full bg-primary text-on-primary text-xs font-semibold shadow-sm hover:opacity-95 active:scale-95 transition-all flex items-center gap-2"
-            >
-              <span className="material-symbols-outlined text-[16px]">add_circle</span>
-              <span>Tạo chat hợp đồng</span>
-            </button>
           </div>
         )}
       </section>
