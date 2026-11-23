@@ -39,7 +39,7 @@ interface NotificationModalProps {
   onNotificationRead?: () => void;
 }
 
-type FilterType = 'ALL' | 'CONTRACT' | 'INTEREST' | 'UNREAD';
+type FilterType = 'ALL' | 'LISTING' | 'UNREAD';
 
 export const NotificationModal: React.FC<NotificationModalProps> = ({
   isOpen,
@@ -289,8 +289,13 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
   // Filtered notifications
   const filteredNotifications = useMemo(() => {
     return notifications.filter((n) => {
-      if (activeFilter === 'CONTRACT') return n.type === 'CONTRACT_INVITATION';
-      if (activeFilter === 'INTEREST') return n.type === 'LISTING_INTEREST';
+      if (activeFilter === 'LISTING') {
+        return (
+          n.type === 'LISTING_INTEREST' ||
+          n.type === 'LISTING_APPROVED' ||
+          n.type === 'LISTING_REJECTED'
+        );
+      }
       if (activeFilter === 'UNREAD') return !n.isRead;
       return true;
     });
@@ -678,23 +683,13 @@ export const NotificationModal: React.FC<NotificationModalProps> = ({
           </button>
           <button
             type="button"
-            onClick={() => setActiveFilter('CONTRACT')}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${activeFilter === 'CONTRACT'
+            onClick={() => setActiveFilter('LISTING')}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${activeFilter === 'LISTING'
                 ? 'bg-ink-primary text-surface shadow-xs'
                 : 'bg-surface-container/70 text-ink-secondary hover:bg-surface-container hover:text-ink-primary'
               }`}
           >
-            Hợp đồng
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveFilter('INTEREST')}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${activeFilter === 'INTEREST'
-                ? 'bg-ink-primary text-surface shadow-xs'
-                : 'bg-surface-container/70 text-ink-secondary hover:bg-surface-container hover:text-ink-primary'
-              }`}
-          >
-            Quan tâm
+            Tin đăng
           </button>
           <button
             type="button"
